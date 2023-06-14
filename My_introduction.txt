@@ -1,0 +1,11 @@
+Roles and Responsibility:
+
+our team leader is responsible for assigning tasks, 
+providing guidance, monitoring progress,and facilitating collaboration among team members
+comming to my projexts 
+my client is toyota
+my busines is toyota manufacturing
+we are taking the data from on-premeises oracle databse to csv file formts from sft file system
+we are loading the data into the stagung are of the azuredata lake gen 2 in etl tool developements
+increamental loading mechanism
+once we are completed this scenarios itjis records and modisfied recors  int the staging area by using the 

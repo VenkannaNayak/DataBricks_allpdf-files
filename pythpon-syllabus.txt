@@ -1,0 +1,74 @@
+data type in pyhton
+sequenc category data types
+type of strings
+operations on str data
+type casting techniques in python
+mutability and immutability
+list catagery data type(collection data type or data structure)
+operations on list objects
+copy techniques
+inner or nested lists
+set catagery data type (collection data type or data structure)
+pre-defined function in set
+pre-defined function in frozenset
+dict catagery data type
+predefine function in dict
+desplaying the results of python program on console
+reading the data dynamically from key board
+operaters and expression in python
+identity operaters
+string handling in python part-2
+flow control statements in python
+conditional or branching or selection statements
+case statements in python
+looping or iterative or repetative statements
+forloop or for else loop
+break program
+continue statements
+type of languge in context of python
+function innpyhton
+listcomprehension
+arguments and parameters
+default parameters or arguments
+key word parameters or agruments
+key word variable length parameters
+local variables and global variables
+global key word
+generaters inpython
+anonymous functions and lamda expression functions
+modules
+technques for re-using the modules
+reloading module in python
+package in python
+exception handling
+type of exception handling
+raise key word
+type of applications files
+files in python
+operations on files
+file opening mode
+number of approaches to open files
+type of files in python
+pickling and un-pickling
+working with csv files in python
+python data base communication pdbd
+commun between python program and oracle database
+ddl drl and dml in python
+list of object oriented princpal
+type of method incase of python
+type of method in class python
+objects in python
+constructoer in python
+constructor and destructor in python
+quantifiers in python
+numpy and traditional list
+numpy arithemetic operaters
+numpy statical operaters
+basic index and advance index
+index and slicing operation of 1d,2d,3d and array
+
+
+
+
+
+

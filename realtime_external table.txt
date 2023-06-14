@@ -1,0 +1,1552 @@
+EXTERNAL TABELS:
+----------------
+
+CREATE	MASTER	KEY	ENCRYPTION	BY	PASSWORD='Nani7396206550'
+
+CREATE	DATABASE	SCOPED	CREDENTIAL	AW_Version
+WITH
+IDENTITY='SRINIVAS',
+SECRET='PAoRFPNK5tVLhTzqpwcLrthsuXoxJU3NlwSMk7t3HUQPkvRgG1BZ2thLXjZ93W0FMKA8figV65NN+AStXjMRRw=='
+
+CREATE	EXTERNAL	DATA	SOURCE	AW_Build
+WITH
+(
+TYPE=HADOOP,
+LOCATION='wasbs://raw@srinivaspunnam.blob.core.windows.net',                                                                                                                                                        
+CREDENTIAL=AW_Version)
+
+
+CREATE	EXTERNAL	FILE	FORMAT	AWB_TEXTFILE
+WITH
+(  
+	 FORMAT_TYPE = DELIMITEDTEXT,
+  	 FORMAT_OPTIONS    (   FIELD_TERMINATOR = ',',
+                        STRING_DELIMITER = '',
+                       DATE_FORMAT         = 'yyyy-MM-dd HH:mm:ss.fff',
+                        USE_TYPE_DEFAULT = FALSE
+                    ));
+
+
+CREATE EXTERNAL	TABLE EXTERNAL_AWB
+(
+	[SystemInformationID] VARCHAR(100)  NOT NULL,
+	[Database Version] VARCHAR(100) NOT NULL,
+	[VersionDate] VARCHAR(100) NOT NULL,
+	[ModifiedDate] VARCHAR(100)NOT	NULL
+) 
+WITH
+(
+   LOCATION='/rawfolder/dbo.AWBuildVersion.csv/',
+   DATA_SOURCE = AW_Build,
+   FILE_FORMAT = AWB_TEXTFILE,
+   REJECT_TYPE = VALUE,
+   REJECT_VALUE = 0
+)
+SELECT	*	FROM	EXTERNAL_AWB
+
+-----------------------------------------------------------------------------------------------------------------------
+
+CREATE	EXTERNAL	TABLE	EXT_ErrorLog
+(
+	[ErrorLogID] VARCHAR(100) NOT NULL,
+	[ErrorTime] VARCHAR(100) NOT NULL,
+	[UserName] VARCHAR(100) NOT NULL,
+	[ErrorNumber] VARCHAR(100) NOT NULL,
+	[ErrorSeverity] VARCHAR(100) NULL,
+	[ErrorState] VARCHAR(100) NULL,
+	[ErrorProcedure] [nvarchar](126) NULL,
+	[ErrorLine] VARCHAR(100) NULL,
+	[ErrorMessage] [nvarchar](4000) NOT NULL
+	)
+	WITH
+(
+   LOCATION='/rawfolder/dbo.ErrorLog.csv/',
+   DATA_SOURCE = AW_Build,
+   FILE_FORMAT = AWB_TEXTFILE,
+   REJECT_TYPE = VALUE,
+   REJECT_VALUE = 0
+)
+SELECT	*	FROM	EXT_ErrorLog
+---------------------------------------------------------------------------------------------------------------------------------------
+
+
+CREATE	EXTERNAL	TABLE	EXT_HRD
+(
+	[DepartmentID] VARCHAR(100) NOT NULL,
+	[Name] VARCHAR(100) NOT NULL,
+	[GroupName]VARCHAR(100) NOT NULL,
+	[ModifiedDate] VARCHAR(100) NOT NULL
+	)
+	WITH
+(
+   LOCATION='/rawfolder/HumanResources.Department.csv/',
+   DATA_SOURCE = AW_Build,
+   FILE_FORMAT = AWB_TEXTFILE,
+   REJECT_TYPE = VALUE,
+   REJECT_VALUE = 0
+)
+
+SELECT	*	FROM	EXT_HRD
+-------------------------------------------------------------------------------------------------------------------------------------------
+	
+	
+  CREATE	EXTERNAL	TABLE	EXT_HRE_DEPT
+(
+	[BusinessEntityID] VARCHAR(100) NOT NULL,
+	[DepartmentID] VARCHAR(100) NOT NULL,
+	[ShiftID] VARCHAR(100) NOT NULL,
+	[StartDate] VARCHAR(100) NOT NULL,                                                      
+	[EndDate] VARCHAR(100) NULL,
+	[ModifiedDate] VARCHAR(100) NOT NULL
+	)
+WITH                                                                                           
+(
+   LOCATION='/rawfolder/HumanResources.EmployeeDepartmentHistory.csv/',                                                                        
+   DATA_SOURCE = AW_Build,
+   FILE_FORMAT = AWB_TEXTFILE,
+   REJECT_TYPE = VALUE,
+   REJECT_VALUE = 0)    
+   
+SELECT	*	FROM	EXT_HRE_DEPT
+-------------------------------------------------------------------------------------------------------------------------------------
+
+
+  CREATE	EXTERNAL	TABLE	EXT_HRE_Payhistory
+  (
+	 [BusinessEntityID] VARCHAR(100) NOT NULL,
+	[RateChangeDate] VARCHAR(100) NOT NULL,
+	[Rate] VARCHAR(100) NOT NULL,
+	[PayFrequency] VARCHAR(100) NOT NULL,
+	[ModifiedDate] VARCHAR(100) NOT NULL
+	)
+	WITH                                                                                           
+(
+   LOCATION='/rawfolder/HumanResources.EmployeePayHistory.csv/',                                                                        
+   DATA_SOURCE = AW_Build,
+   FILE_FORMAT = AWB_TEXTFILE,
+   REJECT_TYPE = VALUE,
+   REJECT_VALUE = 0)    
+   
+   SELECT	*	FROM	EXT_HRE_Payhistory
+   ---------------------------------------------------------------------------------------------------------------------------------
+   
+  CREATE	EXTERNAL	TABLE	EXT_HR_Shift
+  (
+	[ShiftID] VARCHAR(100)NOT NULL,
+	[Name] VARCHAR(100) NOT NULL,
+	[StartTime] VARCHAR(100) NOT NULL,
+	[EndTime] VARCHAR(100) NOT NULL,
+	[ModifiedDate] VARCHAR(100) NOT NULL
+	)
+	WITH                                                                                           
+(
+   LOCATION='/rawfolder/HumanResources.Shift.csv/',                                                                        
+   DATA_SOURCE = AW_Build,
+   FILE_FORMAT = AWB_TEXTFILE,
+   REJECT_TYPE = VALUE,
+   REJECT_VALUE = 0)    
+   
+   SELECT	*	FROM	EXT_HR_Shift
+   -----------------------------------------------------------------------------------------------------------------------------------
+   
+  CREATE	EXTERNAL	TABLE	EXT_Person_addr_Type
+  (
+  [AddressTypeID] VARCHAR(100) NOT NULL,
+	[Name] VARCHAR(100) NOT NULL,
+	[rowguid] VARCHAR(100)  NOT NULL,
+	[ModifiedDate] VARCHAR(100) NOT NULL
+	)
+	WITH                                                                                           
+(
+   LOCATION='/rawfolder/Person.AddressType.csv/',                                                                        
+   DATA_SOURCE = AW_Build,
+   FILE_FORMAT = AWB_TEXTFILE,
+   REJECT_TYPE = VALUE,
+   REJECT_VALUE = 0) 
+ 
+ SELECT	*	FROM	EXT_Person_addr_Type
+ --------------------------------------------------------------------------------------------------------------------------------------------
+ 
+
+  CREATE	EXTERNAL	TABLE	EXT_Person_bussi_Entity
+  (
+	[BusinessEntityID] VARCHAR(100) NOT NULL,
+	[rowguid] VARCHAR(100)  NOT NULL,
+	[ModifiedDate] VARCHAR(100) NOT NULL
+	)
+	WITH                                                                                           
+(
+   LOCATION='/rawfolder/Person.BusinessEntity.csv/',                                                                        
+   DATA_SOURCE = AW_Build,
+   FILE_FORMAT = AWB_TEXTFILE,
+   REJECT_TYPE = VALUE,
+   REJECT_VALUE = 0)
+
+   SELECT	*	FROM	EXT_Person_bussi_Entity
+   -----------------------------------------------------------------------------------------------------------------------------------
+   
+  CREATE	EXTERNAL	TABLE	EXT_Person_Bussi_Entity_Addr
+  (
+	 [BusinessEntityID] VARCHAR(100)	NOT	NULL,
+	[AddressID] VARCHAR(100) NOT	NULL,
+	[AddressTypeID] VARCHAR(100) NOT NULL,
+	[rowguid] VARCHAR(100)  NOT NULL,
+	[ModifiedDate] VARCHAR(100)  NOT NULL
+	)
+	WITH                                                                                           
+(
+   LOCATION='/rawfolder/Person.BusinessEntityAddress.csv/',                                                                        
+   DATA_SOURCE = AW_Build,
+   FILE_FORMAT = AWB_TEXTFILE,
+   REJECT_TYPE = VALUE,
+   REJECT_VALUE = 0)
+ 
+   SELECT	*	FROM  EXT_Person_Bussi_Entity_Addr
+   -----------------------------------------------------------------------------------------------------------------------------
+
+   
+  CREATE	EXTERNAL	TABLE	EXT_Person_Bussi_Contact
+  (
+ [BusinessEntityID] VARCHAR(100) NOT NULL,
+	[PersonID] VARCHAR(100) NOT NULL,
+	[ContactTypeID] VARCHAR(100) NOT NULL,
+	[rowguid] VARCHAR(100)  NOT NULL,
+	[ModifiedDate] VARCHAR(100) NOT NULL)
+	WITH                                                                                           
+(
+   LOCATION='/rawfolder/Person.BusinessEntityContact.csv/',                                                                        
+   DATA_SOURCE = AW_Build,
+   FILE_FORMAT = AWB_TEXTFILE,
+   REJECT_TYPE = VALUE,
+   REJECT_VALUE = 0)
+
+   SELECT	*	FROM	EXT_Person_Bussi_Contact
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+  CREATE	EXTERNAL	TABLE	EXT_Person_Contact_Type
+  (
+  [ContactTypeID] VARCHAR(100) NOT NULL,
+	[Name] VARCHAR(100) NOT NULL,
+	[ModifiedDate] VARCHAR(100) NOT NULL)
+	WITH                                                                                           
+(
+   LOCATION='/rawfolder/Person.ContactType.csv/',                                                                        
+   DATA_SOURCE = AW_Build,
+   FILE_FORMAT = AWB_TEXTFILE,
+   REJECT_TYPE = VALUE,
+   REJECT_VALUE = 0
+   )
+   SELECT	*	FROM	EXT_Person_Contact_Type
+   ----------------------------------------------------------------------------------------------------------------------------------------------------------------
+   CREATE EXTERNAL TABLE EXT_Person_CountryRegion
+   (
+	[CountryRegionCode] NVARCHAR(100) NOT NULL,
+	[Name] VARCHAR(100)NOT NULL,
+	[ModifiedDate] VARCHAR(100) NOT NULL)
+	WITH                                                                                           
+(
+   LOCATION='/rawfolder/Person.CountryRegion.csv/',                                                                        
+   DATA_SOURCE = AW_Build,
+   FILE_FORMAT = AWB_TEXTFILE,
+   REJECT_TYPE = VALUE,
+   REJECT_VALUE = 0
+   )
+   SELECT	*	FROM	EXT_Person_CountryRegion
+   --------------------------------------------------------------------TOO	MANY	COLUMNS	ERRORR-------------------------------------------------------------------------------------
+   
+
+CREATE EXTERNAL TABLE EXT_HR_Job_Candidate
+(
+	[JobCandidateID] VARCHAR(100) NOT NULL,
+	[BusinessEntityID] VARCHAR(100) NULL,
+	[Resume] VARCHAR(100) NULL,
+	[ModifiedDate] VARCHAR(100) NOT NULL)
+	WITH                                                                                           
+(
+   LOCATION='/rawfolder/HumanResources.JobCandidate.csv/',                                                                        
+   DATA_SOURCE = AW_Build,
+   FILE_FORMAT = AWB_TEXTFILE,
+   REJECT_TYPE = VALUE,
+   REJECT_VALUE = 0
+   )
+SELECT	*	FROM	EXT_HR_Job_Candidate
+-------------------------------------------------------------------------------------ERRORR---------------------------------------------------------------------------
+
+CREATE EXTERNAL TABLE EXT_Person_Address
+(
+	[AddressID] VARCHAR(100),
+	[AddressLine1] VARCHAR(100),
+	[AddressLine2] VARCHAR(100) ,
+	[City] VARCHAR(100) ,
+	[StateProvinceID] VARCHAR(100) ,
+	[PostalCode] VARCHAR(100) ,
+	[SpatialLocation] VARCHAR(100),
+	[rowguid] VARCHAR(100),
+	[ModifiedDate] VARCHAR(100))
+	WITH                                                                                           
+(
+   LOCATION='/rawfolder/Person.Address.csv/',                                                                        
+   DATA_SOURCE = AW_Build,
+   FILE_FORMAT = AWB_TEXTFILE,
+   REJECT_TYPE = VALUE,
+   REJECT_VALUE = 0)
+
+   SELECT	*	FROM	EXT_Person_Address
+   --------------------------------------------------------------------ERR0RR---------------------------------------------------------------------------------------------
+  
+  CREATE EXTERNAL TABLE EXT_Person_Email_Address
+   (
+	[BusinessEntityID] VARCHAR(100) NOT NULL,
+	[EmailAddressID] VARCHAR(100)  NOT NULL,
+	[EmailAddress] [nvarchar](50) NULL,
+	[rowguid] VARCHAR(100)  NOT NULL,
+	[ModifiedDate] VARCHAR(100) NOT NULL)
+	WITH                                                                                           
+(
+   LOCATION='/rawfolder/Person.EmailAddress.csv/',                                                                        
+   DATA_SOURCE = AW_Build,
+   FILE_FORMAT = AWB_TEXTFILE,
+   REJECT_TYPE = VALUE,
+   REJECT_VALUE = 0)
+
+   SELECT	*	FROM	EXT_Person_Email_Address
+   ----------------------------------------------------------------------------------------------------------------------------------------------------------------
+  
+  CREATE EXTERNAL TABLE EXT_Person__Password
+  (
+	[BusinessEntityID] VARCHAR(300) NOT NULL,
+	[PasswordHash] VARCHAR(300)  NOT NULL,
+	[PasswordSalt] VARCHAR(100)  NOT NULL,
+	[rowguid] VARCHAR(100)   NOT NULL,
+	[ModifiedDate] VARCHAR(100)  NOT NULL)
+	WITH                                                                                           
+(
+   LOCATION='/rawfolder/Person.Password.csv/',                                                                        
+   DATA_SOURCE = AW_Build,
+   FILE_FORMAT = AWB_TEXTFILE,
+   REJECT_TYPE = VALUE,
+   REJECT_VALUE = 0)
+
+   SELECT	*	FROM	EXT_Person__Password
+   -----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+   CREATE EXTERNAL TABLE EXT_Person__Person
+   (
+	[BusinessEntityID] VARCHAR(100) NOT NULL,
+	[PersonType] VARCHAR(100) NOT NULL,
+	[NameStyle] VARCHAR(100) NOT NULL,
+	[Title] VARCHAR(100) NULL,
+	[FirstName] VARCHAR(100)NOT NULL,
+	[MiddleName] VARCHAR(100) NULL,
+	[LastName] VARCHAR(100)NOT NULL,
+	[Suffix] VARCHAR(100) NULL,
+	[EmailPromotion] VARCHAR(100) NOT NULL,
+	[AdditionalContactInfo] VARCHAR(100) NULL,
+	[Demographics] VARCHAR(100) NULL,
+	[rowguid] VARCHAR(100) NOT NULL,
+	[ModifiedDate] VARCHAR(100) NOT NULL)
+	WITH                                                                                           
+(
+   LOCATION='/rawfolder/Person.Person.csv/',                                                                        
+   DATA_SOURCE = AW_Build,
+   FILE_FORMAT = AWB_TEXTFILE,
+   REJECT_TYPE = VALUE,
+   REJECT_VALUE = 0)
+
+   SELECT	*	FROM	EXT_Person__Person
+   ---------------------------------------------------------------------------------ERRORR------------------------------------------------------------------------
+
+   CREATE EXTERNAL TABLE EXT_Person__Person_Phone
+   (
+	[BusinessEntityID] VARCHAR(100) NOT NULL,
+	[PhoneNumber] VARCHAR(100) NOT NULL,
+	[PhoneNumberTypeID] VARCHAR(100) NOT NULL,
+	[ModifiedDate] VARCHAR(100) NOT NULL)
+	WITH                                                                                           
+(
+   LOCATION='/rawfolder/Person.PersonPhone.csv/',                                                                        
+   DATA_SOURCE = AW_Build,
+   FILE_FORMAT = AWB_TEXTFILE,
+   REJECT_TYPE = VALUE,
+   REJECT_VALUE = 0)
+
+   SELECT	*	FROM	EXT_Person__Person_Phone
+   ---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+   CREATE EXTERNAL TABLE EXT_Person_PhnNum_Type
+   (
+	[PhoneNumberTypeID] VARCHAR(100) NOT NULL,
+	[Name] VARCHAR(100) NOT NULL,
+	[ModifiedDate] VARCHAR(100) NOT NULL)
+	WITH                                                                                           
+(
+   LOCATION='/rawfolder/Person.PhoneNumberType.csv/',                                                                        
+   DATA_SOURCE = AW_Build,
+   FILE_FORMAT = AWB_TEXTFILE,
+   REJECT_TYPE = VALUE,
+   REJECT_VALUE = 0)
+
+   SELECT	*	FROM	EXT_Person_PhnNum_Type
+   ------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+   CREATE EXTERNAL TABLE EXT_Person__StateProvince
+   (
+	[StateProvinceID] VARCHAR(100)  NOT NULL,
+	[StateProvinceCode] VARCHAR(100) NOT NULL,
+	[CountryRegionCode] VARCHAR(100) NOT NULL,
+	[IsOnlyStateProvinceFlag] VARCHAR(100) NOT NULL,
+	[Name] VARCHAR(100)NOT NULL,
+	[TerritoryID] VARCHAR(100) NOT NULL,
+	[rowguid] VARCHAR(100) NOT NULL,
+	[ModifiedDate] VARCHAR(100) NOT NULL)
+	WITH                                                                                           
+(
+   LOCATION='/rawfolder/Person.StateProvince.csv/',                                                                        
+   DATA_SOURCE = AW_Build,
+   FILE_FORMAT = AWB_TEXTFILE,
+   REJECT_TYPE = VALUE,
+   REJECT_VALUE = 0)
+
+   SELECT	*	FROM	EXT_Person__StateProvince
+   --------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+   CREATE EXTERNAL TABLE EXT_Production__BillMaterials
+   (
+	[BillOfMaterialsID] VARCHAR(100)  NOT NULL,
+	[ProductAssemblyID] VARCHAR(100) NULL,
+	[ComponentID] VARCHAR(100) NOT NULL,
+	[StartDate] VARCHAR(100) NOT NULL,
+	[EndDate] VARCHAR(100) NULL,
+	[UnitMeasureCode] VARCHAR(100) NOT NULL,
+	[BOMLevel] VARCHAR(100) NOT NULL,
+	[PerAssemblyQty] VARCHAR(100) NOT NULL,
+	[ModifiedDate] VARCHAR(100) NOT NULL)
+	WITH                                                                                           
+(
+   LOCATION='/rawfolder/Production.BillOfMaterials.csv/',                                                                        
+   DATA_SOURCE = AW_Build,
+   FILE_FORMAT = AWB_TEXTFILE,
+   REJECT_TYPE = VALUE,
+   REJECT_VALUE = 0)
+
+   SELECT	*	FROM	EXT_Production__BillMaterials
+   -------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+   CREATE EXTERNAL TABLE EXT_Production__Culture
+   (
+	[CultureID] VARCHAR(100) NOT NULL,
+	[Name] VARCHAR(100) NOT NULL,
+	[ModifiedDate] VARCHAR(100) NOT NULL)
+	WITH                                                                                           
+(
+   LOCATION='/rawfolder/Production.Culture.csv/',                                                                        
+   DATA_SOURCE = AW_Build,
+   FILE_FORMAT = AWB_TEXTFILE,
+   REJECT_TYPE = VALUE,
+   REJECT_VALUE = 0)
+
+   SELECT	*	FROM	EXT_Production__Culture
+   ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+   CREATE EXTERNAL TABLE EXT_Production__Document
+   (
+	[DocumentNode] VARCHAR(100)NOT NULL,
+	[DocumentLevel]  VARCHAR(100),
+	[Title] VARCHAR(100) NOT NULL,
+	[Owner] VARCHAR(100) NOT NULL,
+	[FolderFlag] VARCHAR(100) NOT NULL,
+	[FileName] VARCHAR(100) NOT NULL,
+	[FileExtension] VARCHAR(100) NOT NULL,
+	[Revision] VARCHAR(100) NOT NULL,
+	[ChangeNumber] VARCHAR(100) NOT NULL,
+	[Status] VARCHAR(100) NOT NULL,
+	[DocumentSummary] VARCHAR(100) NULL,
+	[Document] VARCHAR(100) NULL,
+	[rowguid] VARCHAR(100)  NOT NULL,
+	[ModifiedDate] VARCHAR(100) NOT NULL)
+	WITH                                                                                           
+(
+   LOCATION='/rawfolder/Production.Document.csv/',                                                                        
+   DATA_SOURCE = AW_Build,
+   FILE_FORMAT = AWB_TEXTFILE,
+   REJECT_TYPE = VALUE,
+   REJECT_VALUE = 0)
+
+   SELECT	*	FROM	EXT_Production__Document
+   ---------------------------------------------------------------------ERRORR--------------------------------------------------------------------------------------------
+
+   CREATE EXTERNAL TABLE EXT_Production_Illustration
+   (
+	[IllustrationID] VARCHAR(100)  NOT NULL,
+	[Diagram] VARCHAR(100) NULL,
+	[ModifiedDate] VARCHAR(100) NOT NULL)
+	WITH                                                                                           
+(
+   LOCATION='/rawfolder/Production.Illustration.csv/',                                                                        
+   DATA_SOURCE = AW_Build,
+   FILE_FORMAT = AWB_TEXTFILE,
+   REJECT_TYPE = VALUE,
+   REJECT_VALUE = 0)
+
+   SELECT	*	FROM	EXT_Production_Illustration
+   ------------------------------------------------------------------------ERRORR--------------------------------------------------------------------------------------
+   CREATE EXTERNAL TABLE EXT_Production_Location
+   (
+	[LocationID] VARCHAR(100) NOT NULL,
+	[Name] VARCHAR(100) NOT NULL,
+	[CostRate] VARCHAR(100) NOT NULL,
+	[Availability] VARCHAR(100)NOT NULL,
+	[ModifiedDate] VARCHAR(100) NOT NULL)
+	WITH                                                                                           
+(
+   LOCATION='/rawfolder/Production.Location.csv/',                                                                        
+   DATA_SOURCE = AW_Build,
+   FILE_FORMAT = AWB_TEXTFILE,
+   REJECT_TYPE = VALUE,
+   REJECT_VALUE = 0)
+   SELECT	*	FROM	EXT_Production_Location
+   -------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+   CREATE EXTERNAL TABLE EXT_Production_Product
+   (
+	[ProductID] [int]   NOT NULL,
+	[Name]  VARCHAR(100) NOT NULL,
+	[ProductNumber] [nvarchar](25) NOT NULL,
+	[MakeFlag]  VARCHAR(100) NOT NULL,
+	[FinishedGoodsFlag]  VARCHAR(100) NOT NULL,
+	[Color] [nvarchar](15) NULL,
+	[SafetyStockLevel]  VARCHAR(100) NOT NULL,
+	[ReorderPoint]  VARCHAR(100) NOT NULL,
+	[StandardCost]  VARCHAR(100) NOT NULL,
+	[ListPrice]  VARCHAR(100) NOT NULL,
+	[Size] [nvarchar](5) NULL,
+	[SizeUnitMeasureCode] [nchar](3) NULL,
+	[WeightUnitMeasureCode] [nchar](3) NULL,
+	[Weight] [decimal](8, 2) NULL,
+	[DaysToManufacture] [int] NOT NULL,
+	[ProductLine] [nchar](2) NULL,
+	[Class] [nchar](2) NULL,
+	[Style] [nchar](2) NULL,
+	[ProductSubcategoryID] [int] NULL,
+	[ProductModelID] [int] NULL,
+	[SellStartDate]  VARCHAR(100) NOT NULL,
+	[SellEndDate]  VARCHAR(100) NULL,
+	[DiscontinuedDate]  VARCHAR(100) NULL,
+	[rowguid]  VARCHAR(100)  NOT NULL,
+	[ModifiedDate]  VARCHAR(100) NOT NULL)
+	WITH                                                                                           
+(
+   LOCATION='/rawfolder/Production.Product.csv/',                                                                        
+   DATA_SOURCE = AW_Build,
+   FILE_FORMAT = AWB_TEXTFILE,
+   REJECT_TYPE = VALUE,
+   REJECT_VALUE = 0)
+
+   SELECT	*	FROM	EXT_Production_Product
+   ------------------------------------------------------------------------------ERRORR------------------------------------------------------------------------------
+  
+  CREATE EXTERNAL TABLE EXT_Production_Product_Category
+  (
+	[ProductCategoryID] VARCHAR(100)  NOT NULL,
+	[Name]  VARCHAR(100) NOT NULL,
+	[rowguid]  VARCHAR(100)  NOT NULL,
+	[ModifiedDate]  VARCHAR(100) NOT NULL)
+	WITH                                                                                           
+(
+   LOCATION='/rawfolder/Production.ProductCategory.csv/',                                                                        
+   DATA_SOURCE = AW_Build,
+   FILE_FORMAT = AWB_TEXTFILE,
+   REJECT_TYPE = VALUE,
+   REJECT_VALUE = 0)
+
+   SELECT	*	FROM	EXT_Production_Product_Category
+   ---------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+   CREATE EXTERNAL TABLE EXT_Production_Product_CostHistory
+   (
+	[ProductID] VARCHAR(100) NOT NULL,
+	[StartDate] VARCHAR(100) NOT NULL,
+	[EndDate] VARCHAR(100) NULL,
+	[StandardCost] VARCHAR(100) NOT NULL,
+	[ModifiedDate] VARCHAR(100) NOT NULL)
+	WITH                                                                                           
+(
+   LOCATION='/rawfolder/Production.ProductCostHistory.csv/',                                                                        
+   DATA_SOURCE = AW_Build,
+   FILE_FORMAT = AWB_TEXTFILE,
+   REJECT_TYPE = VALUE,
+   REJECT_VALUE = 0)
+
+   SELECT	*	FROM	EXT_Production_Product_CostHistory
+   ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+   CREATE EXTERNAL TABLE EXT_Production_Product_Description
+   (
+	[ProductDescriptionID] VARCHAR(100)  NOT NULL,
+	[Description] VARCHAR(100) NOT NULL,
+	[rowguid] VARCHAR(100)  NOT NULL,
+	[ModifiedDate] VARCHAR(100) NOT NULL)
+	WITH                                                                                           
+(
+   LOCATION='/rawfolder/Production.ProductDescription.csv/',                                                                        
+   DATA_SOURCE = AW_Build,
+   FILE_FORMAT = AWB_TEXTFILE,
+   REJECT_TYPE = VALUE,
+   REJECT_VALUE = 0)
+   
+   SELECT	*	FROM	EXT_Production_Product_Description
+   ---------------------------------------------------------------------Too-many-Columns--ERRORR------------------------------------------------------------------------
+
+   CREATE EXTERNAL TABLE EXT_Production_Product_Document
+   (
+	[ProductID]  VARCHAR(100) NOT NULL,
+	[DocumentNode]  VARCHAR(100) NOT NULL,
+	[ModifiedDate]  VARCHAR(100) NOT NULL)
+	WITH                                                                                           
+(
+   LOCATION='/rawfolder/Production.ProductDocument.csv/',                                                                        
+   DATA_SOURCE = AW_Build,
+   FILE_FORMAT = AWB_TEXTFILE,
+   REJECT_TYPE = VALUE,
+   REJECT_VALUE = 0)
+
+   SELECT	*	FROM	EXT_Production_Product_Document
+   ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+   
+CREATE EXTERNAL TABLE EXT_Production_Product_Inventory
+(
+	[ProductID] VARCHAR(100) NOT NULL,
+	[LocationID] VARCHAR(100) NOT NULL,
+	[Shelf] VARCHAR(100) NOT NULL,
+	[Bin] VARCHAR(100) NOT NULL,
+	[Quantity] VARCHAR(100) NOT NULL,
+	[rowguid] VARCHAR(100)NOT NULL,
+	[ModifiedDate] VARCHAR(100) NOT NULL)
+	WITH                                                                                           
+(
+   LOCATION='/rawfolder/Production.ProductInventory.csv/',                                                                        
+   DATA_SOURCE = AW_Build,
+   FILE_FORMAT = AWB_TEXTFILE,
+   REJECT_TYPE = VALUE,
+   REJECT_VALUE = 0)
+
+   SELECT	*	FROM	EXT_Production_Product_Inventory
+   -------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+   CREATE EXTERNAL TABLE EXT_Production_List_PriceHistory
+   (
+	[ProductID] VARCHAR(100) NOT NULL,
+	[StartDate] VARCHAR(100) NOT NULL,
+	[EndDate] VARCHAR(100) NULL,
+	[ListPrice] VARCHAR(100) NOT NULL,
+	[ModifiedDate] VARCHAR(100) NOT NULL)
+	WITH                                                                                           
+(
+   LOCATION='/rawfolder/Production.ProductListPriceHistory.csv/',                                                                        
+   DATA_SOURCE = AW_Build,
+   FILE_FORMAT = AWB_TEXTFILE,
+   REJECT_TYPE = VALUE,
+   REJECT_VALUE = 0)
+
+   SELECT	*	FROM	EXT_Production_List_PriceHistory
+   -------------------------------------------------------------------------------------------------------------------------------------------------------
+
+   CREATE EXTERNAL TABLE EXT_Production_Product_Model
+   (
+	[ProductModelID] VARCHAR(100)  NOT NULL,
+	[Name] VARCHAR(100) NOT NULL,
+	[CatalogDescription] VARCHAR(100) NULL,
+	[Instructions] VARCHAR(100) NULL,
+	[rowguid] VARCHAR(100)  NOT NULL,
+	[ModifiedDate] VARCHAR(100) NOT NULL)
+	WITH                                                                                           
+(
+   LOCATION='/rawfolder/Production.ProductModel.csv/',                                                                        
+   DATA_SOURCE = AW_Build,
+   FILE_FORMAT = AWB_TEXTFILE,
+   REJECT_TYPE = VALUE,
+   REJECT_VALUE = 0)
+
+   SELECT	*	FROM	EXT_Production_Product_Model
+   ---------------------------------------------------------------------ERRORR----------------------------------------------------------------------------------------
+
+   CREATE EXTERNAL TABLE EXT_Production_Model_Illustration
+   (
+	[ProductModelID] VARCHAR(100) NOT NULL,
+	[IllustrationID] VARCHAR(100) NOT NULL,
+	[ModifiedDate] VARCHAR(100) NOT NULL)
+	WITH                                                                                           
+(
+   LOCATION='/rawfolder/Production.ProductModelIllustration.csv/',                                                                        
+   DATA_SOURCE = AW_Build,
+   FILE_FORMAT = AWB_TEXTFILE,
+   REJECT_TYPE = VALUE,
+   REJECT_VALUE = 0)
+   
+   SELECT	*	FROM	EXT_Production_Model_Illustration
+   ------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+   CREATE EXTERNAL TABLE EXT_Production_MProduct_DescriptionCulture
+   (
+	[ProductModelID] VARCHAR(100) NOT NULL,
+	[ProductDescriptionID] VARCHAR(100) NOT NULL,
+	[CultureID] VARCHAR(100) NOT NULL,
+	[ModifiedDate] VARCHAR(100) NOT NULL)
+	WITH                                                                                           
+	(
+   LOCATION='/rawfolder/Production.ProductModelProductDescriptionCulture.csv/',                                                                        
+   DATA_SOURCE = AW_Build,
+   FILE_FORMAT = AWB_TEXTFILE,
+   REJECT_TYPE = VALUE,
+   REJECT_VALUE = 0)
+   
+   SELECT	*	FROM	EXT_Production_MProduct_DescriptionCulture
+   -----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+   CREATE EXTERNAL TABLE EXT_Production_Photo
+   (
+	[ProductPhotoID] VARCHAR(100)  NOT NULL,
+	[ThumbNailPhoto] [VARCHAR](max) NULL,
+	[ThumbnailPhotoFileName] VARCHAR(MAX) NULL,
+	[LargePhoto] [VARCHAR](max) NULL,
+	[LargePhotoFileName] VARCHAR(100) NULL,
+	[ModifiedDate] VARCHAR(100) NOT NULL)
+	WITH                                                                                           
+	(
+   LOCATION='/rawfolder/Production.ProductPhoto.csv/',                                                                        
+   DATA_SOURCE = AW_Build,
+   FILE_FORMAT = AWB_TEXTFILE,
+   REJECT_TYPE = VALUE,
+   REJECT_VALUE = 0)
+   
+   SELECT	*	FROM	EXT_Production_Photo
+   ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+   CREATE EXTERNAL TABLE EXT_Production_P_Product_Photo
+   (
+	[ProductID] VARCHAR(100) NOT NULL,
+	[ProductPhotoID] VARCHAR(100) NOT NULL,
+	[Primary] VARCHAR(100) NOT NULL,
+	[ModifiedDate] VARCHAR(100) NOT NULL)
+	WITH                                                                                           
+	(
+   LOCATION='/rawfolder/Production.ProductProductPhoto.csv/',                                                                        
+   DATA_SOURCE = AW_Build,
+   FILE_FORMAT = AWB_TEXTFILE,
+   REJECT_TYPE = VALUE,
+   REJECT_VALUE = 0)
+   
+   SELECT	*	FROM	EXT_Production_P_Product_Photo
+   ------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+   CREATE EXTERNAL TABLE EXT_Production_Product_Review
+   (
+	[ProductReviewID] VARCHAR(100)NOT NULL,
+	[ProductID] VARCHAR(100) NOT NULL,
+	[ReviewerName] VARCHAR(100) NOT NULL,
+	[ReviewDate] VARCHAR(100) NOT NULL,
+	[EmailAddress] VARCHAR(100) NOT NULL,
+	[Rating] VARCHAR(100) NOT NULL,
+	[Comments]	VARCHAR(100),
+	[ModifiedDate] VARCHAR(100) NOT NULL)
+	WITH                                                                                           
+	(
+   LOCATION='/rawfolder/Production.ProductReview.csv/',                                                                        
+   DATA_SOURCE = AW_Build,
+   FILE_FORMAT = AWB_TEXTFILE,
+   REJECT_TYPE = VALUE,
+   REJECT_VALUE = 0)
+
+   SELECT	*	FROM	EXT_Production_Product_Review
+   ------------------------------------------------------------------------ERRORR-----------------------------------------------------------------------------------------
+
+   CREATE EXTERNAL TABLE EXT_Production_Product_Subcategory
+   (
+	[ProductSubcategoryID] VARCHAR(100) NOT NULL,
+	[ProductCategoryID] VARCHAR(100) NOT NULL,
+	[Name] VARCHAR(100) NOT NULL,
+	[rowguid] VARCHAR(100)  NOT NULL,
+	[ModifiedDate] VARCHAR(100) NOT NULL)
+	WITH                                                                                           
+	(
+   LOCATION='/rawfolder/Production.ProductSubcategory.csv/',                                                                        
+   DATA_SOURCE = AW_Build,
+   FILE_FORMAT = AWB_TEXTFILE,
+   REJECT_TYPE = VALUE,
+   REJECT_VALUE = 0)
+   
+   SELECT	*	FROM	EXT_Production_Product_Subcategory
+   ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+   CREATE EXTERNAL TABLE EXT_Production_Scrap_Reason
+   (
+	[ScrapReasonID] VARCHAR(100) NOT NULL,
+	[Name] VARCHAR(100) NOT NULL,
+	[ModifiedDate] VARCHAR(100) NOT NULL)
+	WITH                                                                                           
+	(
+   LOCATION='/rawfolder/Production.ScrapReason.csv/',                                                                        
+   DATA_SOURCE = AW_Build,
+   FILE_FORMAT = AWB_TEXTFILE,
+   REJECT_TYPE = VALUE,
+   REJECT_VALUE = 0)
+     
+   SELECT	*	FROM	EXT_Production_Scrap_Reason
+   -----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+   CREATE EXTERNAL TABLE EXT_Production_Trans_History
+   (
+	[TransactionID] VARCHAR(100)  NOT NULL,
+	[ProductID] VARCHAR(100) NOT NULL,
+	[ReferenceOrderID] VARCHAR(100) NOT NULL,
+	[ReferenceOrderLineID] VARCHAR(100) NOT NULL,
+	[TransactionDate]  VARCHAR(100)  NOT NULL,
+	[TransactionType]  VARCHAR(100)  NOT NULL,
+	[Quantity] VARCHAR(100) NOT NULL,
+	[ActualCost]  VARCHAR(100)  NOT NULL,
+	[ModifiedDate]  VARCHAR(100)  NOT NULL)
+	WITH                                                                                           
+	(
+   LOCATION='/rawfolder/Production.TransactionHistory.csv/',                                                                        
+   DATA_SOURCE = AW_Build,
+   FILE_FORMAT = AWB_TEXTFILE,
+   REJECT_TYPE = VALUE,
+   REJECT_VALUE = 0)
+   
+   SELECT	*	FROM	EXT_Production_Trans_History
+   -----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+   CREATE EXTERNAL TABLE EXT_Production_Trans_History_Archive
+   (
+	[TransactionID] VARCHAR(100) NOT NULL,
+	[ProductID] VARCHAR(100) NOT NULL,
+	[ReferenceOrderID] VARCHAR(100) NOT NULL,
+	[ReferenceOrderLineID] VARCHAR(100) NOT NULL,
+	[TransactionDate] VARCHAR(100) NOT NULL,
+	[TransactionType] VARCHAR(100) NOT NULL,
+	[Quantity] VARCHAR(100) NOT NULL,
+	[ActualCost] VARCHAR(100) NOT NULL,
+	[ModifiedDate] VARCHAR(100) NOT NULL)
+	WITH                                                                                           
+	(
+   LOCATION='/rawfolder/Production.TransactionHistoryArchive.csv/',                                                                        
+   DATA_SOURCE = AW_Build,
+   FILE_FORMAT = AWB_TEXTFILE,
+   REJECT_TYPE = VALUE,
+   REJECT_VALUE = 0)
+   
+   SELECT	*	FROM	EXT_Production_Trans_History_Archive
+   ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+   CREATE EXTERNAL TABLE EXT_Production_Unit_Measure
+   (
+	[UnitMeasureCode] VARCHAR(100) NOT NULL,
+	[Name] VARCHAR(100) NOT NULL,
+	[ModifiedDate] VARCHAR(100) NOT NULL)
+	WITH                                                                                           
+	(
+   LOCATION='/rawfolder/Production.UnitMeasure.csv/',                                                                        
+   DATA_SOURCE = AW_Build,
+   FILE_FORMAT = AWB_TEXTFILE,
+   REJECT_TYPE = VALUE,
+   REJECT_VALUE = 0)
+   
+   SELECT	*	FROM	EXT_Production_Unit_Measure
+   -------------------------------------------------------------------------Too	many--columns	ERRORR------------------------------------------------------------------------------------------------
+
+   CREATE EXTERNAL TABLE EXT_Production_Work_Order
+   (
+	[WorkOrderID] VARCHAR(100)  NOT NULL,
+	[ProductID] VARCHAR(100) NOT NULL,
+	[OrderQty] VARCHAR(100) NOT NULL,
+	[StockedQty]  VARCHAR(100),
+	[ScrappedQty] VARCHAR(100) NOT NULL,
+	[StartDate] VARCHAR(100) NOT NULL,
+	[EndDate] VARCHAR(100) NULL,
+	[DueDate] VARCHAR(100) NOT NULL,
+	[ScrapReasonID] VARCHAR(100) NULL,
+	[ModifiedDate] VARCHAR(100) NOT NULL)
+	WITH                                                                                           
+	(
+   LOCATION='/rawfolder/Production.WorkOrder.csv/',                                                                        
+   DATA_SOURCE = AW_Build,
+   FILE_FORMAT = AWB_TEXTFILE,
+   REJECT_TYPE = VALUE,
+   REJECT_VALUE = 0)
+   
+   SELECT	*	FROM	EXT_Production_Work_Order
+   ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+   CREATE EXTERNAL TABLE EXT_Production_WorkOrder_Routing
+   (
+	[WorkOrderID] VARCHAR(100) NOT NULL,
+	[ProductID] VARCHAR(100) NOT NULL,
+	[OperationSequence]  VARCHAR(100) NOT NULL,
+	[LocationID]  VARCHAR(100) NOT NULL,
+	[ScheduledStartDate]  VARCHAR(100) NOT NULL,
+	[ScheduledEndDate]  VARCHAR(100) NOT NULL,
+	[ActualStartDate]  VARCHAR(100) NULL,
+	[ActualEndDate]  VARCHAR(100) NULL,
+	[ActualResourceHrs]  VARCHAR(100) NULL,
+	[PlannedCost]  VARCHAR(100) NOT NULL,
+	[ActualCost]  VARCHAR(100) NULL,
+	[ModifiedDate]  VARCHAR(100) NOT NULL)
+	WITH                                                                                           
+	(
+   LOCATION='/rawfolder/Production.WorkOrderRouting.csv/',                                                                        
+   DATA_SOURCE = AW_Build,
+   FILE_FORMAT = AWB_TEXTFILE,
+   REJECT_TYPE = VALUE,
+   REJECT_VALUE = 0)
+   
+   SELECT	*	FROM	EXT_Production_WorkOrder_Routing
+   ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+   CREATE EXTERNAL TABLE EXT_Purchasing_Product_Vendor
+   (
+	[ProductID] VARCHAR(100) NOT NULL,
+	[BusinessEntityID] VARCHAR(100) NOT NULL,
+	[AverageLeadTime] VARCHAR(100) NOT NULL,
+	[StandardPrice] VARCHAR(100) NOT NULL,
+	[LastReceiptCost] VARCHAR(100) NULL,
+	[LastReceiptDate] VARCHAR(100) NULL,
+	[MinOrderQty] VARCHAR(100) NOT NULL,
+	[MaxOrderQty] VARCHAR(100) NOT NULL,
+	[OnOrderQty] VARCHAR(100) NULL,
+	[UnitMeasureCode] VARCHAR(100) NOT NULL,
+	[ModifiedDate] VARCHAR(100) NOT NULL)
+	WITH                                                                                           
+	(
+   LOCATION='/rawfolder/Purchasing.ProductVendor.csv/',                                                                        
+   DATA_SOURCE = AW_Build,
+   FILE_FORMAT = AWB_TEXTFILE,
+   REJECT_TYPE = VALUE,
+   REJECT_VALUE = 0)
+   
+   SELECT	*	FROM	EXT_Purchasing_Product_Vendor
+   ------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+   CREATE EXTERNAL TABLE EXT_Purchasing_Order_Detail
+   (
+	[PurchaseOrderID] VARCHAR(100) NOT NULL,
+	[PurchaseOrderDetailID] VARCHAR(100)  NOT NULL,
+	[DueDate] VARCHAR(100) NOT NULL,
+	[OrderQty] VARCHAR(100) NOT NULL,
+	[ProductID] VARCHAR(100) NOT NULL,
+	[UnitPrice] VARCHAR(100) NOT NULL,
+	[LineTotal] VARCHAR(100),
+	[ReceivedQty] VARCHAR(100) NOT NULL,
+	[RejectedQty] VARCHAR(100) NOT NULL,
+	[StockedQty]  VARCHAR(100),
+	[ModifiedDate] VARCHAR(100) NOT NULL)
+	WITH                                                                                           
+	(
+   LOCATION='/rawfolder/Purchasing.PurchaseOrderDetail.csv/',                                                                        
+   DATA_SOURCE = AW_Build,
+   FILE_FORMAT = AWB_TEXTFILE,
+   REJECT_TYPE = VALUE,
+   REJECT_VALUE = 0)
+   
+   SELECT	*	FROM	EXT_Purchasing_Order_Detail
+   ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+   CREATE EXTERNAL TABLE EXT_Purchasing_Order_Header
+   (
+	[PurchaseOrderID] VARCHAR(100)  NOT NULL,
+	[RevisionNumber]  VARCHAR(100) NOT NULL,
+	[Status]  VARCHAR(100) NOT NULL,
+	[EmployeeID] VARCHAR(100) NOT NULL,
+	[VendorID] VARCHAR(100) NOT NULL,
+	[ShipMethodID] VARCHAR(100) NOT NULL,
+	[OrderDate]  VARCHAR(100) NOT NULL,
+	[ShipDate]  VARCHAR(100) NULL,
+	[SubTotal]  VARCHAR(100) NOT NULL,
+	[TaxAmt]  VARCHAR(100) NOT NULL,
+	[Freight]  VARCHAR(100) NOT NULL,
+	[TotalDue]  VARCHAR(100)NOT NULL,
+	[ModifiedDate]  VARCHAR(100) NOT NULL)
+	WITH                                                                                           
+	(
+   LOCATION='/rawfolder/Purchasing.PurchaseOrderHeader.csv/',                                                                        
+   DATA_SOURCE = AW_Build,
+   FILE_FORMAT = AWB_TEXTFILE,
+   REJECT_TYPE = VALUE,
+   REJECT_VALUE = 0)
+   
+   SELECT	*	FROM	EXT_Purchasing_Order_Header
+   ------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+   CREATE EXTERNAL TABLE EXT_Purchasing_ShipMethod
+   (
+	[ShipMethodID] VARCHAR(100) NOT NULL,
+	[Name] VARCHAR(100) NOT NULL,
+	[ShipBase] VARCHAR(100) NOT NULL,
+	[ShipRate] VARCHAR(100) NOT NULL,
+	[rowguid] VARCHAR(100) NOT NULL,
+	[ModifiedDate] VARCHAR(100) NOT NULL)
+	WITH                                                                                           
+	(
+   LOCATION='/rawfolder/Purchasing.ShipMethod.csv/',                                                                        
+   DATA_SOURCE = AW_Build,
+   FILE_FORMAT = AWB_TEXTFILE,
+   REJECT_TYPE = VALUE,
+   REJECT_VALUE = 0)
+   
+   SELECT	*	FROM	EXT_Purchasing_ShipMethod
+   -------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+   CREATE EXTERNAL TABLE EXT_Purchasing_Vendor
+   (
+	[BusinessEntityID] VARCHAR(100) NOT NULL,
+	[AccountNumber] VARCHAR(100)  NOT NULL,
+	[Name] VARCHAR(100)  NOT NULL,
+	[CreditRating] VARCHAR(100)  NOT NULL,
+	[PreferredVendorStatus] VARCHAR(100)  NOT NULL,
+	[ActiveFlag] VARCHAR(100) NOT NULL,
+	[PurchasingWebServiceURL] VARCHAR(100)  NULL,
+	[ModifiedDate] VARCHAR(100)  NOT NULL)
+	WITH                                                                                           
+	(
+   LOCATION='/rawfolder/Purchasing.Vendor.csv/',                                                                        
+   DATA_SOURCE = AW_Build,
+   FILE_FORMAT = AWB_TEXTFILE,
+   REJECT_TYPE = VALUE,
+   REJECT_VALUE = 0)
+    
+   SELECT	*	FROM	EXT_Purchasing_Vendor
+   -------------------------------------------------------------TOO_MANY_COLUMNS_ERRORR-------------------------------------------------------------------------------------
+
+   CREATE EXTERNAL TABLE EXT_Sales_Country_RegionCurrency
+   (
+	[CountryRegionCode] VARCHAR(100) NOT NULL,
+	[CurrencyCode]VARCHAR(100) NOT NULL,
+	[ModifiedDate] VARCHAR(100) NOT NULL)
+	WITH                                                                                           
+	(
+   LOCATION='/rawfolder/Sales.CountryRegionCurrency.csv/',                                                                        
+   DATA_SOURCE = AW_Build,
+   FILE_FORMAT = AWB_TEXTFILE,
+   REJECT_TYPE = VALUE,
+   REJECT_VALUE = 0)
+   
+   SELECT	*	FROM	EXT_Sales_Country_RegionCurrency
+   ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+   CREATE EXTERNAL TABLE EXT_Sales_CreditCard
+   (
+	[CreditCardID] VARCHAR(100)  NOT NULL,
+	[CardType] VARCHAR(100) NOT NULL,
+	[CardNumber] VARCHAR(100) NOT NULL,
+	[ExpMonth] VARCHAR(100) NOT NULL,
+	[ExpYear] VARCHAR(100) NOT NULL,
+	[ModifiedDate] VARCHAR(100) NOT NULL)
+	WITH                                                                                           
+	(
+   LOCATION='/rawfolder/Sales.CreditCard.csv/',                                                                        
+   DATA_SOURCE = AW_Build,
+   FILE_FORMAT = AWB_TEXTFILE,
+   REJECT_TYPE = VALUE,
+   REJECT_VALUE = 0)
+   
+   SELECT	*	FROM	EXT_Sales_CreditCard
+   -----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+   CREATE EXTERNAL TABLE EXT_Sales_Currency
+   (
+	[CurrencyCode] VARCHAR(100) NOT NULL,
+	[Name] VARCHAR(100) NOT NULL,
+	[ModifiedDate] VARCHAR(100) NOT NULL)
+	WITH                                                                                           
+	(
+   LOCATION='/rawfolder/Sales.Currency.csv/',                                                                        
+   DATA_SOURCE = AW_Build,
+   FILE_FORMAT = AWB_TEXTFILE,
+   REJECT_TYPE = VALUE,
+   REJECT_VALUE = 0)
+   
+   SELECT	*	FROM	EXT_Sales_Currency
+   --------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+   CREATE EXTERNAL TABLE EXT_Currency_Rate
+   (
+	[CurrencyRateID] VARCHAR(100)  NOT NULL,
+	[CurrencyRateDate] VARCHAR(100) NOT NULL,
+	[FromCurrencyCode] VARCHAR(100) NOT NULL,
+	[ToCurrencyCode] VARCHAR(100) NOT NULL,
+	[AverageRate] VARCHAR(100) NOT NULL,
+	[EndOfDayRate] VARCHAR(100) NOT NULL,
+	[ModifiedDate] VARCHAR(100) NOT NULL)
+	WITH                                                                                           
+	(
+   LOCATION='/rawfolder/Sales.CurrencyRate.csv/',                                                                        
+   DATA_SOURCE = AW_Build,
+   FILE_FORMAT = AWB_TEXTFILE,
+   REJECT_TYPE = VALUE,
+   REJECT_VALUE = 0)
+   
+   SELECT	*	FROM	EXT_Currency_Rate
+   ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+   CREATE EXTERNAL TABLE EXT_Sales_Customer
+   (
+	[CustomerID] VARCHAR(100) NOT NULL,
+	[PersonID] VARCHAR(100) NULL,
+	[StoreID] VARCHAR(100) NULL,
+	[TerritoryID] VARCHAR(100) NULL,
+	[AccountNumber]  VARCHAR(100),
+	[rowguid]VARCHAR(100)  NOT NULL,
+	[ModifiedDate] VARCHAR(100) NOT NULL)
+	WITH                                                                                           
+	(
+   LOCATION='/rawfolder/Sales.Customer.csv/',                                                                        
+   DATA_SOURCE = AW_Build,
+   FILE_FORMAT = AWB_TEXTFILE,
+   REJECT_TYPE = VALUE,
+   REJECT_VALUE = 0)
+   
+   SELECT	*	FROM	EXT_Sales_Customer
+   -------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  
+  CREATE EXTERNAL TABLE EXT_Sales_Person_CreditCard
+   (
+	[BusinessEntityID] VARCHAR(100) NOT NULL,
+	[CreditCardID] VARCHAR(100) NOT NULL,
+	[ModifiedDate] VARCHAR(100) NOT NULL)
+	WITH                                                                                           
+	(
+   LOCATION='/rawfolder/Sales.PersonCreditCard.csv/',                                                                        
+   DATA_SOURCE = AW_Build,
+   FILE_FORMAT = AWB_TEXTFILE,
+   REJECT_TYPE = VALUE,
+   REJECT_VALUE = 0)
+   
+   SELECT	*	FROM	EXT_Sales_Person_CreditCard
+   ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+   CREATE EXTERNAL TABLE EXT_Sales_Order_Detail
+   (
+	[SalesOrderID]  VARCHAR(100) NOT NULL,
+	[SalesOrderDetailID]  VARCHAR(100)  NOT NULL,
+	[CarrierTrackingNumber] VARCHAR(100) NULL,
+	[OrderQty] VARCHAR(100) NOT NULL,
+	[ProductID]  VARCHAR(100) NOT NULL,
+	[SpecialOfferID]  VARCHAR(100) NOT NULL,
+	[UnitPrice] VARCHAR(100) NOT NULL,
+	[UnitPriceDiscount] VARCHAR(100) NOT NULL,
+	[LineTotal]  VARCHAR(100),
+	[rowguid] VARCHAR(100)  NOT NULL,
+	[ModifiedDate] VARCHAR(100) NOT NULL)
+	WITH                                                                                           
+	(
+   LOCATION='/rawfolder/Sales.SalesOrderDetail.csv/',                                                                        
+   DATA_SOURCE = AW_Build,
+   FILE_FORMAT = AWB_TEXTFILE,
+   REJECT_TYPE = VALUE,
+   REJECT_VALUE = 0)
+   
+   SELECT	*	FROM	EXT_Sales_Order_Detail
+   --------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+   CREATE EXTERNAL TABLE EXT_Sales_Order_Header
+   (
+	[SalesOrderID] VARCHAR(100) NOT NULL,
+	[RevisionNumber] VARCHAR(100)  NOT NULL,
+	[OrderDate] VARCHAR(100)  NOT NULL,
+	[DueDate] VARCHAR(100)  NOT NULL,
+	[ShipDate] VARCHAR(100)  NULL,
+	[Status] VARCHAR(100)  NOT NULL,
+	[OnlineOrderFlag] VARCHAR(100) NOT NULL,
+	[SalesOrderNumber]  VARCHAR(100) ,
+	[PurchaseOrderNumber] VARCHAR(100)  NULL,
+	[AccountNumber] VARCHAR(100)  NULL,
+	[CustomerID] VARCHAR(100) NOT NULL,
+	[SalesPersonID] VARCHAR(100) NULL,
+	[TerritoryID] VARCHAR(100) NULL,
+	[BillToAddressID] VARCHAR(100) NOT NULL,
+	[ShipToAddressID] VARCHAR(100) NOT NULL,
+	[ShipMethodID] VARCHAR(100) NOT NULL,
+	[CreditCardID] VARCHAR(100) NULL,
+	[CreditCardApprovalCode]VARCHAR(100)  NULL,
+	[CurrencyRateID] VARCHAR(100) NULL,
+	[SubTotal] VARCHAR(100)  NOT NULL,
+	[TaxAmt] VARCHAR(100)  NOT NULL,
+	[Freight] VARCHAR(100)  NOT NULL,
+	[TotalDue]  VARCHAR(100) ,
+	[Comment] VARCHAR(200)  NULL,
+	[rowguid] VARCHAR(100)   NOT NULL,
+	[ModifiedDate] VARCHAR(100)  NOT NULL)
+	WITH                                                                                           
+	(
+   LOCATION='/rawfolder/Sales.SalesOrderHeader.csv/',                                                                        
+   DATA_SOURCE = AW_Build,
+   FILE_FORMAT = AWB_TEXTFILE,
+   REJECT_TYPE = VALUE,
+   REJECT_VALUE = 0)
+   
+   SELECT	*	FROM	EXT_Sales_Order_Header
+   ------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+   CREATE EXTERNAL TABLE EXT_Sales_OrderHeader_SalesReason
+   (
+	[SalesOrderID] VARCHAR(100) NOT NULL,
+	[SalesReasonID] VARCHAR(100) NOT NULL,
+	[ModifiedDate] VARCHAR(100) NOT NULL)
+	WITH                                                                                           
+	(
+   LOCATION='/rawfolder/Sales.SalesOrderHeaderSalesReason.csv/',                                                                        
+   DATA_SOURCE = AW_Build,
+   FILE_FORMAT = AWB_TEXTFILE,
+   REJECT_TYPE = VALUE,
+   REJECT_VALUE = 0)
+   
+   SELECT	*	FROM	EXT_Sales_OrderHeader_SalesReason
+   ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+   CREATE EXTERNAL TABLE EXT_Sales_Sales_Person
+   (
+	[BusinessEntityID] VARCHAR(100) NOT NULL,
+	[TerritoryID] VARCHAR(100) NULL,
+	[SalesQuota] VARCHAR(100) NULL,
+	[Bonus] VARCHAR(100) NOT NULL,
+	[CommissionPct] VARCHAR(100) NOT NULL,
+	[SalesYTD] VARCHAR(100) NOT NULL,
+	[SalesLastYear] VARCHAR(100) NOT NULL,
+	[rowguid] VARCHAR(100)  NOT NULL,
+	[ModifiedDate] VARCHAR(100) NOT NULL)
+	WITH                                                                                           
+	(
+   LOCATION='/rawfolder/Sales.SalesPerson.csv/',                                                                        
+   DATA_SOURCE = AW_Build,
+   FILE_FORMAT = AWB_TEXTFILE,
+   REJECT_TYPE = VALUE,
+   REJECT_VALUE = 0)
+   
+   SELECT	*	FROM	EXT_Sales_Sales_Person
+   -------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+   CREATE EXTERNAL TABLE EXT_Sales_Person_QuotaHistory
+   (
+	[BusinessEntityID] VARCHAR(100) NOT NULL,
+	[QuotaDate] VARCHAR(100) NOT NULL,
+	[SalesQuota]  VARCHAR(100) NOT NULL,
+	[rowguid]  VARCHAR(100)NOT NULL,
+	[ModifiedDate]  VARCHAR(100) NOT NULL)
+	WITH                                                                                           
+	(
+   LOCATION='/rawfolder/Sales.SalesPersonQuotaHistory.csv/',                                                                        
+   DATA_SOURCE = AW_Build,
+   FILE_FORMAT = AWB_TEXTFILE,
+   REJECT_TYPE = VALUE,
+   REJECT_VALUE = 0)
+   
+   SELECT	*	FROM	EXT_Sales_Person_QuotaHistory
+   ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+   CREATE EXTERNAL TABLE EXT_Sales_Reason
+   (
+	[SalesReasonID] VARCHAR(100)  NOT NULL,
+	[Name] VARCHAR(100) NOT NULL,
+	[ReasonType] VARCHAR(100) NOT NULL,
+	[ModifiedDate] VARCHAR(100)NOT NULL)
+	WITH                                                                                           
+	(
+   LOCATION='/rawfolder/Sales.SalesReason.csv/',                                                                        
+   DATA_SOURCE = AW_Build,
+   FILE_FORMAT = AWB_TEXTFILE,
+   REJECT_TYPE = VALUE,
+   REJECT_VALUE = 0)
+   
+   SELECT	*	FROM	EXT_Sales_Reason
+   --------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+   CREATE EXTERNAL TABLE EXT_Sales_TaxRate
+   (
+	[SalesTaxRateID] VARCHAR(100)NOT NULL,
+	[StateProvinceID] VARCHAR(100) NOT NULL,
+	[TaxType] VARCHAR(100) NOT NULL,
+	[TaxRate] VARCHAR(100) NOT NULL,
+	[Name] VARCHAR(100) NOT NULL,
+	[rowguid] VARCHAR(100)  NOT NULL,
+	[ModifiedDate] VARCHAR(100) NOT NULL)
+	WITH                                                                                           
+	(
+   LOCATION='/rawfolder/Sales.SalesTaxRate.csv/',                                                                        
+   DATA_SOURCE = AW_Build,
+   FILE_FORMAT = AWB_TEXTFILE,
+   REJECT_TYPE = VALUE,
+   REJECT_VALUE = 0)
+   
+   SELECT	*	FROM	EXT_Sales_TaxRate
+   ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+   CREATE EXTERNAL TABLE EXT_Sales_Territory
+   (
+	[TerritoryID] VARCHAR(100) NOT NULL,
+	[Name] VARCHAR(100) NOT NULL,
+	[CountryRegionCode] VARCHAR(100) NOT NULL,
+	[Group] VARCHAR(100) NOT NULL,
+	[SalesYTD] VARCHAR(100) NOT NULL,
+	[SalesLastYear] VARCHAR(100) NOT NULL,
+	[CostYTD] VARCHAR(100) NOT NULL,
+	[CostLastYear] VARCHAR(100) NOT NULL,
+	[rowguid] VARCHAR(100)  NOT NULL,
+	[ModifiedDate] VARCHAR(100) NOT NULL)
+	WITH                                                                                           
+	(
+   LOCATION='/rawfolder/Sales.SalesTerritory.csv/',                                                                        
+   DATA_SOURCE = AW_Build,
+   FILE_FORMAT = AWB_TEXTFILE,
+   REJECT_TYPE = VALUE,
+   REJECT_VALUE = 0)
+   
+   SELECT	*	FROM	EXT_Sales_Territory
+   ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+   CREATE EXTERNAL TABLE EXT_Sales_Territory_History
+   (
+	[BusinessEntityID] VARCHAR(100) NOT NULL,
+	[TerritoryID] VARCHAR(100) NOT NULL,
+	[StartDate] VARCHAR(100) NOT NULL,
+	[EndDate] VARCHAR(100) NULL,
+	[rowguid] VARCHAR(100) NOT NULL,
+	[ModifiedDate] VARCHAR(100) NOT NULL)
+	WITH                                                                                           
+	(
+   LOCATION='/rawfolder/Sales.SalesTerritoryHistory.csv/',                                                                        
+   DATA_SOURCE = AW_Build,
+   FILE_FORMAT = AWB_TEXTFILE,
+   REJECT_TYPE = VALUE,
+   REJECT_VALUE = 0)
+   
+   SELECT	*	FROM	EXT_Sales_Territory_History
+   --------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+   CREATE EXTERNAL TABLE EXT_Sales_Shopping_CartItem
+   (
+	[ShoppingCartItemID] VARCHAR(100) NOT NULL,
+	[ShoppingCartID] VARCHAR(100) NOT NULL,
+	[Quantity] VARCHAR(100) NOT NULL,
+	[ProductID] VARCHAR(100) NOT NULL,
+	[DateCreated] VARCHAR(100) NOT NULL,
+	[ModifiedDate] VARCHAR(100) NOT NULL)
+	WITH                                                                                           
+	(
+   LOCATION='/rawfolder/Sales.ShoppingCartItem.csv/',                                                                        
+   DATA_SOURCE = AW_Build,
+   FILE_FORMAT = AWB_TEXTFILE,
+   REJECT_TYPE = VALUE,
+   REJECT_VALUE = 0)
+   
+   SELECT	*	FROM	EXT_Sales_Shopping_CartItem
+   ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+   CREATE EXTERNAL TABLE EXT_Sales_Special_Offer
+   (
+	[SpecialOfferID] VARCHAR(100)  NOT NULL,
+	[Description] VARCHAR(255) NOT NULL,
+	[DiscountPct] VARCHAR(225) NOT NULL,
+	[Type] VARCHAR(225) NOT NULL,
+	[Category] VARCHAR(225) NOT NULL,
+	[StartDate] VARCHAR(100) NOT NULL,
+	[EndDate] VARCHAR(100) NOT NULL,
+	[MinQty] VARCHAR(100) NOT NULL,
+	[MaxQty] VARCHAR(100) NULL,
+	[rowguid] VARCHAR(225)  NOT NULL,
+	[ModifiedDate] VARCHAR(100) NOT NULL)
+	WITH                                                                                           
+	(
+   LOCATION='/rawfolder/Sales.SpecialOffer.csv/',                                                                        
+   DATA_SOURCE = AW_Build,
+   FILE_FORMAT = AWB_TEXTFILE,
+   REJECT_TYPE = VALUE,
+   REJECT_VALUE = 0)
+   
+   SELECT	*	FROM	EXT_Sales_Special_Offer
+   -------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+   CREATE EXTERNAL TABLE EXT_Sales_SpecialOffer_Product
+   (
+	[SpecialOfferID] VARCHAR(100) NOT NULL,
+	[ProductID] VARCHAR(100) NOT NULL,
+	[rowguid] VARCHAR(200) NOT NULL,
+	[ModifiedDate] VARCHAR(100) NOT NULL)
+	WITH                                                                                           
+	(
+   LOCATION='/rawfolder/Sales.SpecialOfferProduct.csv/',                                                                        
+   DATA_SOURCE = AW_Build,
+   FILE_FORMAT = AWB_TEXTFILE,
+   REJECT_TYPE = VALUE,
+   REJECT_VALUE = 0)
+   
+   SELECT	*	FROM	EXT_Sales_SpecialOffer_Product
+   ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  
+  CREATE EXTERNAL TABLE EXT_Sales_Store 
+   (
+	[BusinessEntityID] VARCHAR(100)  NOT NULL,
+	[Name] VARCHAR(200) NOT NULL,
+	[SalesPersonID] VARCHAR(100) NOT  NULL,
+	[Demographics] VARCHAR(200) NOT NULL,
+	[rowguid]  VARCHAR(200)  NOT NULL,
+	[ModifiedDate]  VARCHAR(100)  NOT NULL)
+	WITH                                                                                           
+	(
+   LOCATION='/rawfolder/Sales.Store.csv/',                                                                        
+   DATA_SOURCE = AW_Build,
+   FILE_FORMAT = AWB_TEXTFILE,
+   REJECT_TYPE = VALUE,
+   REJECT_VALUE = 0)
+   
+   SELECT	*	FROM	EXT_Sales_Store
+======================================================================================================
+RTP PROJECTS:
+-------------
+SELECT A.TABLE_SCHEMA, B.TABLE_NAME, COLUMN_NAME, DATA_TYPE
+FROM INFORMATION_SCHEMA.TABLES AS A 
+INNER JOIN INFORMATION_SCHEMA.COLUMNS AS B 
+ON A.TABLE_NAME = B.TABLE_NAME AND A.TABLE_SCHEMA = B.TABLE_SCHEMA
+WHERE COLUMN_NAME LIKE '%EmailAddress%' AND TABLE_TYPE = 'BASE TABLE';
+
+SELECT TABLE_NAME, COLUMN_NAME
+FROM INFORMATION_SCHEMA.COLUMNS
+WHERE COLUMN_NAME LIKE '%rowguid%'
+
+Product.Product:
+---------------
+SELECT A.TABLE_SCHEMA, B.TABLE_NAME, COLUMN_NAME, DATA_TYPE
+FROM INFORMATION_SCHEMA.TABLES AS A 
+INNER JOIN INFORMATION_SCHEMA.COLUMNS AS B 
+ON A.TABLE_NAME = B.TABLE_NAME AND A.TABLE_SCHEMA = B.TABLE_SCHEMA
+WHERE COLUMN_NAME LIKE '%ModifiedDate%' AND TABLE_TYPE = 'BASE TABLE';
+
+SELECT TABLE_NAME, COLUMN_NAME
+FROM INFORMATION_SCHEMA.COLUMNS
+WHERE COLUMN_NAME LIKE '%rowguid%'
+
+SELECT DISTINCT
+    pch.ProductID,
+    pch.ModifiedDate,
+    p.ProductNumber,
+    p.MakeFlag,
+    p.FinishedGoodsFlag,
+    p.Color,
+    p.SafetyStockLevel,
+    p.ReorderPoint,
+    p.StandardCost,
+    p.ListPrice,
+    p.SizeUnitMeasureCode,
+    p.Size,
+    p.WeightUnitMeasureCode,
+    p.Weight,
+    p.ProductModelID,
+    pi.ModifiedDate,
+    p.Name,
+    p.rowguid
+   
+FROM Production.ProductCostHistory AS pch
+INNER JOIN Production.ProductInventory AS pi ON pch.ProductID = pi.ProductID
+INNER JOIN Production.Product AS p ON pch.ProductID = p.ProductID
+INNER JOIN Production.WorkOrder AS wo ON pch.ProductID = wo.ProductID
+INNER JOIN Sales.SpecialOfferProduct AS sop ON pch.ProductID = sop.ProductID
+INNER JOIN Production.TransactionHistory AS th ON sop.ProductID = th.ProductID
+
+LEFT JOIN Sales.SalesTerritory AS st ON p.rowguid = st.rowguid
+LEFT JOIN Sales.SalesTerritoryHistory AS sth ON st.rowguid = sth.rowguid
+LEFT JOIN Production.ProductCategory AS pc ON sth.rowguid = pc.rowguid
+LEFT JOIN Purchasing.ShipMethod AS sm ON pc.rowguid = sm.rowguid
+LEFT JOIN Production.ProductDescription AS pd ON sm.rowguid = pd.rowguid
+LEFT JOIN Person.Address AS a ON pd.rowguid = a.rowguid
+LEFT JOIN Person.AddressType AS at ON a.rowguid = at.rowguid
+LEFT JOIN Person.StateProvince AS sp ON at.rowguid = sp.rowguid
+LEFT join Sales.Store as ss on at.rowguid=sp.rowguid
+left join Person.BusinessEntity as pb on at.rowguid=ss.rowguid
+left join Person.AddressType as pa on at.rowguid=p.rowguid
+left join Person.BusinessEntityAddress pe on at.rowguid=pa.rowguid
+left join Person.BusinessEntityContact p1 on at.rowguid=pe.rowguid
+left join Sales.Customer sc on at.rowguid=p1.rowguid
+left join Sales.SalesOrderDetail sd on at.rowguid=sc.rowguid
+left join Person.Person pp on at.rowguid=sd.rowguid
+left join Person.Password p2 on at.rowguid=pp.rowguid
+left join Sales.SalesPersonQuotaHistory pq on at.rowguid=p2.rowguid
+
+LEFT JOIN Person.Person AS per ON pch.ModifiedDate = per.ModifiedDate
+LEFT JOIN Production.ProductSubcategory AS psc ON per.ModifiedDate = psc.ModifiedDate
+LEFT JOIN Production.ProductModel AS pm ON per.ModifiedDate = pm.ModifiedDate
+LEFT JOIN Production.Illustration AS i ON pm.ModifiedDate = i.ModifiedDate
+LEFT JOIN Production.ProductModelProductDescriptionCulture AS pmc ON i.ModifiedDate = pmc.ModifiedDate
+left join HumanResources.JobCandidate as hj on at.ModifiedDate=pmc.ModifiedDate
+left join Production.ProductModelIllustration as ppm on at.ModifiedDate=hj.ModifiedDate
+left join Production.Location as pl on at.ModifiedDate=ppm.ModifiedDate
+left join dbo.AWBuildVersion as db on at.ModifiedDate=pl.ModifiedDate
+left join Production.ProductSubcategory as pps on at.ModifiedDate=db.ModifiedDate
+
+Production Adress:
+------------------
+SELECT TABLE_NAME, COLUMN_NAME
+FROM INFORMATION_SCHEMA.COLUMNS
+WHERE COLUMN_NAME = 'BusinessEntityID'
+GROUP BY TABLE_NAME, COLUMN_NAME
+HAVING COUNT(*) > =1
+
+
+SELECT A.TABLE_SCHEMA, B.TABLE_NAME, COLUMN_NAME, DATA_TYPE
+FROM INFORMATION_SCHEMA.TABLES AS A 
+INNER JOIN INFORMATION_SCHEMA.COLUMNS AS B 
+ON A.TABLE_NAME = B.TABLE_NAME AND A.TABLE_SCHEMA = B.TABLE_SCHEMA
+WHERE COLUMN_NAME LIKE '%EmailAddress%' AND TABLE_TYPE = 'BASE TABLE';
+
+Person.Adress:
+--------------
+SELECT distinct
+    sp.StateProvinceCode, 
+    sp.CountryRegionCode, 
+    a.City, 
+    a.PostalCode, 
+    a.AddressID
+FROM 
+    Person.StateProvince sp
+INNER JOIN 
+    Person.Address a ON sp.StateProvinceID = a.StateProvinceID
+FULL OUTER JOIN 
+    Person.CountryRegion cr ON a.ModifiedDate = cr.ModifiedDate
+INNER JOIN 
+    Sales.CountryRegionCurrency crc ON sp.CountryRegionCode = crc.CountryRegionCode
+INNER JOIN 
+    Sales.SalesTerritory st ON sp.CountryRegionCode = st.CountryRegionCode;
+
+Production.Customers:
+---------------------
+SELECT TABLE_NAME, COLUMN_NAME
+FROM INFORMATION_SCHEMA.COLUMNS
+WHERE COLUMN_NAME = 'BusinessEntityID'
+GROUP BY TABLE_NAME, COLUMN_NAME
+HAVING COUNT(*) > =1
+
+
+SELECT A.TABLE_SCHEMA, B.TABLE_NAME, COLUMN_NAME, DATA_TYPE
+FROM INFORMATION_SCHEMA.TABLES AS A 
+INNER JOIN INFORMATION_SCHEMA.COLUMNS AS B 
+ON A.TABLE_NAME = B.TABLE_NAME AND A.TABLE_SCHEMA = B.TABLE_SCHEMA
+WHERE COLUMN_NAME LIKE '%EmailAddress%' AND TABLE_TYPE = 'BASE TABLE';
+
+select distinct
+Title,
+FirstName,
+MiddleName,
+LastName,
+NameStyle,
+BirthDate,
+MaritalStatus,
+Suffix,
+Gender,
+AddressLine1,
+AddressLine2
+
+FROM Person.Address AS p 
+INNER JOIN HumanResources.Employee AS e ON p.ModifiedDate = e.ModifiedDate
+INNER JOIN Production.ProductReview AS r ON e.BusinessEntityID = r.ProductReviewID 
+inner join Person.EmailAddress as ea on ea.BusinessEntityID=e.BusinessEntityID
+inner join Person.PersonPhone as pp on ea.BusinessEntityID=pp.BusinessEntityID
+inner join Person.PhoneNumberType paa on paa.PhoneNumberTypeID=pp.PhoneNumberTypeID
+inner join Person.Person as pt on pt.BusinessEntityID=pp.BusinessEntityID
+

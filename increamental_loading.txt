@@ -1,0 +1,59 @@
+{
+  "name": "IncrementalLoadPipeline",
+  "activities": [
+    {
+      "name": "LookupLastExecutionTimestamp",
+      "type": "Lookup",
+      "linkedServiceName": {
+        "referenceName": "AzureBlobStorageLinkedService",
+        "type": "LinkedServiceReference"
+      },
+      "typeProperties": {
+        "source": {
+          "type": "BlobSource",
+          "recursive": true
+        },
+        "dataset": {
+          "referenceName": "LookupDataset",
+          "type": "DatasetReference"
+        },
+        "firstRowOnly": true
+      }
+    },
+    {
+      "name": "CopyNewRecords",
+      "type": "Copy",
+      "linkedServiceName": {
+        "referenceName": "AzureBlobStorageLinkedService",
+        "type": "LinkedServiceReference"
+      },
+      "typeProperties": {
+        "source": {
+          "type": "BlobSource",
+          "recursive": true,
+          "filter": {
+            "type": "Expression",
+            "expression": "createdTimestamp >= '@{pipeline().parameters.lastExecutionTimestamp}'"
+          }
+        },
+        "sink": {
+          "type": "AzureBlobStorageSink"
+        },
+        "enableStaging": false
+      }
+    },
+    {
+      "name": "UpdateLastExecutionTimestamp",
+      "type": "SetVariable",
+      "value": "@activity('CopyNewRecords').output.maxTimestamp",
+      "typeProperties": {
+        "variableName": "lastExecutionTimestamp"
+      }
+    }
+  ],
+  "parameters": {
+    "lastExecutionTimestamp": {
+      "type": "String"
+    }
+  }
+}

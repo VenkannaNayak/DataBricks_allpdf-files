@@ -1,0 +1,99 @@
+pivot mean:
+a pivot transformation is a data transformation that rotates data from rows into columns
+
+Unpivot mean:
+an unpivot transformation is a data transformation that rotates data from columns into rows
+
+windows:
+Aggregates data based on a window and joins with original data
+
+Rank:
+Add column or expression for rank
+
+External call:
+Make a query or call procedures against an external data store
+
+Cast mean:
+In data flow, a cast transformation is a data transformation that changes the data type of one or more columns in a dataset.
+
+Flattern:
+Add columns to map
+
+Parse:
+Creating/updating the columns 'headers, status'
+
+stringfy:
+Converts your column data into JSON or CSV
+
+Filter:
+Add expression for the filter
+
+Sort mean:
+Add column or expression for sort
+
+Alter:
+Add expressions to alter rows
+
+Asserts:
+an assert transformation is a data transformation that validates the data in a dataset and 
+raises an error if the data does not meet specified criteria.
+
+Flowlet:
+Choose a flowlet to execute.
+
+Flowlet:
+a flowlet is a unit of work that represents a self-contained subset of a data pipeline
+or it is processors
+
+switch activity:
+a switch activity is a control flow activity that allows you to conditionally execute one or more activities based on
+the value of a specified expression.
+
+Until activity:
+the Until activity is a control flow activity that allows you to repeatedly execute a set of activities until 
+a specified condition is met
+
+contains:
+the @contains() function is a built-in expression function that is used to check whether a string or 
+an array contains a specified value.
+@contains(variables('myString'), 'World')
+
+empty
+Returns true if object, array, or string is empty. For example, the following expression returns true: empty('')
+@empty(variables('myString'))
+
+first
+Returns the first element in the array or string passed in. For example, this function returns 0: first([0,2,3])
+@first(variables('myArray'))
+
+
+Intersection:
+Returns a single array or object with the common elements between the arrays or objects passed to it. 
+For example, this function returns [1, 2]: 
+intersection([1, 2, 3], [101, 2, 1, 10],[6, 8, 1, 2]). The parameters for the function can either be a set of objects 
+or a set of arrays (not a mixture thereof). If there are two objects with the same name, 
+the last object with that name appears in the final object.
+join
+
+@intersection() function is a built-in expression function that is used to find the common elements between two arrays.
+@intersection(variables('array1'), variables('array2'))
+@greater(length(intersection(variables('array1'), variables('array2'))), 0)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

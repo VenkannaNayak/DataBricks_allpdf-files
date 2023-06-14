@@ -1,0 +1,275 @@
+1.what is azure data factory?
+a.it is selfhostedIR
+b.it is a cloud based ETL tool
+c.synapse data ware house 
+d.it is networking related
+
+2.what are the components of the azure data factory?
+a.4
+b.3
+c.5
+d.6
+
+3.what are the diffrent type of IRS?
+a.4
+b.5
+c.3
+d.None
+
+4.what is the given below on-premises or private network IRS in adf?
+a.autoresolvement irs
+b.ssis irs
+c.self-hosted irs
+d.none of the above
+
+5.what is the given default cloud based IRS in adf?
+a.either b or c
+b.ssis irs
+c.self-hosted irs
+d.autoresolvement irs
+
+6.what are there types of  IRS in adf?
+a. either b or c
+b.either d or a
+c.either a or b or d
+d.either b or neither c
+choice of options below
+a.self-hosted irs
+b.auto-resolvement irs
+c.OLAP
+d.SSIS irs
+
+7.which activities are transferring the data from azure data factory to anther azure data factory?
+a.filter activity and delete activity
+b.copy activity and foreach activity
+c.Http url and wait activity
+d.conditional activity
+
+8.which one is the looping and executing several activities in adf?
+a.filter activity
+b.lookup activity
+c.conditional activiy
+d.foreach cativity
+
+9.which to get the list of filenames in storage in specifying flattern,item,size and fixed properties used in adf?
+a.Lookup activity
+b.Getmeta data activity
+c.copy activity
+d.set avriable activity
+
+10.Which activity copying the data from source to destination in azure data factory pipeline?
+a.copy data activity
+b.getmeta data activity
+c.append variable activity
+d.filter cativity
+
+11.By supporting the azure data factory to retrive the data from data source and passing the output as input to other activities?
+a.getmeta data cativity
+b.copy and filter activities
+c.lookup activity
+d.all of the above
+
+12.which activities are representing based on condition true or false activity will be execute in adf?
+a.set variable activity
+b.copy data activity and lookup activity
+c.if conditional activity
+d.all of the above
+
+13.which activity used in sending the email notification in azure data factory?
+a.Http web activity
+b.Rest web api activity
+c.web activity
+d.FTP site Url
+
+14.In web activity to send the email notifications by using which aplication?
+a.power apps
+b.Logic apps
+c.Snowflake
+d.FileZilla apps
+
+15.what is the diffrent name of Default integration run time in azure data factory?
+a.on-premises irs
+b.ssis irs
+c.sftp file system
+d.None of the above
+
+16.which integration run time is customized runtime is used to connect to cloud?
+a.azure integration run time
+b.self-hosted integration runtime
+c.autoresolve integration runtime
+d.all of the above
+
+17.which are using to apply transformations in azure data factory?
+a.Data flow
+b.executing data flow
+c.mapping data flow
+d.derived column data flow
+
+18.Compute infrastructure to execute activities and performing data movements?
+a.Linked services
+b.autoresolve integration runtime
+c.integration runtime
+d.self-hosted integration runtime
+
+19.Data can move and transform and loading of data preparation?
+a.data flow
+b.data set
+c.mapping data flow
+d.selecting transform
+
+20.which services we are using to preparation of datasets?
+a.integration runtime
+b.self-hosted irs
+c.ssis irs
+d.Linked Services
+
+21.what is stands for ETL?
+a.extract transforming and loading
+b.extracting transform load
+c.extract transform load
+d.extract transforming load
+
+22.which services connection information to any data source?
+a.saas
+b.linked services
+c.iaas
+d.paas
+
+23.which activity had used to be designing the ETL and an execution of data flow?
+a.pipelines
+b.execution dataflow
+c.mapping dataflow
+d.streaming data
+
+24.To performing a specific operation like copy data activity,delete activity?
+a.activities
+b.filter activity
+c.lookup activities
+d.None of the above
+
+25.schedule of pipelines on specific time automatically?
+a.schedule triggers
+b.archive triggers
+c.triggers
+d.event triggers
+
+26.what is the correct definition of Deriver column in adf?
+a.appending of data into one output
+b.based on condition data will be splitted
+c.filtering of data by putting filter condition
+d.deriveing new column by using expressions
+
+27.what is the correct definition of union in adf?
+a.appending of data into one output
+b.based on condition data will be splitted
+c.filtering of data by putting filter condition
+d.deriveing new column by using expressions
+
+28.what is the correct definition of filter in adf?
+a.appending of data into one output
+b.based on condition data will be splitted
+c.filtering of data by putting filter condition
+d.deriveing new column by using expressions
+
+29.what is the correct definition of conditional split in adf?
+a.appending of data into one output
+b.based on condition data will be splitted
+c.filtering of data by putting filter condition
+d.deriveing new column by writing expressions
+
+30.what is the correct definition of assertions in adf?
+a.appending of data into one output
+b.perfuming some data validations by specifying data rule
+c.filtering of data by putting filter condition
+d.deriveing new column by writing expressions
+
+31.what is the correct definition of join in adf?
+a.joining of two inputs like inner,left,outer custom
+b.based on condition data will be splitted
+c.filtering of data by putting filter condition
+d.deriveing new column by writing expressions
+
+32.what is the correct definition of aggregate in adf?
+a.appending of data into one output
+b.based on condition data will be splitted
+c.filtering of data by putting filter condition
+d.performing aggregate and group by
+
+33.Given below the statements what is common mean of sentences find out in adf?
+a.deriveing new column by writing expressions
+b.appending of data into one output
+c.By writing the expression we derived a new columns
+d.matching of records in each table without finding of duplicate data
+e.based on codition data will be splitted
+f.to split the data in multiple ways based there conditions
+
+choose the correct mean of sentences from above
+A. a and c are same meaning
+B.a and b are same meaning
+C.c and e are same meaning
+d.a,b,c and f same meaning
+
+34.Given below the statements what is common mean of sentences find out in adf?
+a.deriveing new column by writing expressions
+b.appending of data into one output
+c.By writing the expression we derived a new columns
+d.matching of records in each table without finding of duplicate data
+e.based on codition data will be splitted
+f.to split the data in multiple ways based there conditions
+
+choose the correct mean of sentences from above
+A. a and d are same meaning
+B.a and f are same meaning
+C.b and d are same meaning
+d.a,b,c,d and f same meaning
+
+35.Given below the statements what is common mean of sentences find out in adf?
+a.deriveing new column by writing expressions
+b.appending of data into one output
+c.By writing the expression we derived a new columns
+d.matching of records in each table without finding of duplicate data
+e.based on codition data will be splitted
+f.as perschdule triggers recursively executing pipelines
+g.to split the data in multiple ways based there conditions
+
+choose the correct mean of sentences from above
+A. a and g are same meaning
+B.a and b are same meaning
+C.g and e are same meaning
+d.a,b,c,g and f same meaning
+
+36.how to implement scd type-1 simple mean?
+a.updating and deleting data
+b.inserting and updating data
+c.alter data
+d.none of the above
+
+36.how to implement scd type-2 simple mean?
+a.updating and deleting data
+b.inserting and updating data
+c.alter data
+d.inserting and updating the data in a historical manner in each table rows  isactive 0 and 1
+
+37.what are the activities implement increamental loading with sequecely?
+a.lookup activity,copyactivity,filter activity
+b.lookup activity,copy activity,storeprocedure activity
+c.storeprocedure activity,lookup activity,copy activity
+d.storeprocedure activity,copy activity,lookup activity
+
+38.how to implement security mechanism?
+a.azure integration runtime
+b.azure keyvault
+c.self-hosted integration runtime
+d.all of the above
+
+39.concating the more than one pipelines in azure data factory(in mapping data flow) Is?
+a.sourcedata flow
+b.derived transfering data flow
+c.executing data flow
+d.joining data flow
+
+40.Types of triggers in adf?
+a.scheduling triggers,thumbling triggers and function triggers
+b.event based triggers,synchronous triggers and de-synchronous triggers
+c.data flow triggers,archive triggers and streaming triggers
+d.thumbling triggers,scheduling triggers and event based triggers

@@ -1,0 +1,48 @@
+Create master key encryption by password='Appuro@10111'
+
+
+CREATE DATABASE SCOPED CREDENTIAL AZURESTORAGECREDENTIAL
+  WITH 
+   IDENTITY='RAM',
+   secret='6v/l4TkuJv7W88FUNt74tIBC0Em1ty6Cn6ZtWx2GLxF3MOkMdQgek6WLaWPN79yV5Axi7ZfTfWLG+AStss5i6g=='
+
+
+CREATE EXTERNAL DATA SOURCE AZURESTORAGE
+  WITH
+    (
+	  TYPE=HADOOP,---blob or datalake
+	  LOCATION='wasbs://employee@eclasessmemorylake.blob.core.windows.net',
+	  CREDENTIAL=AZURESTORAGECREDENTIAL
+	  
+	)
+
+
+CREATE EXTERNAL FILE FORMAT EMPFILE
+ WITH
+    (  FORMAT_TYPE=delimitedtext,
+       format_options(field_terminator=',',FIRST_ROW = 2)
+    )
+
+CREATE EXTERNAL TABLE extemp
+(
+  eno INT,
+  ename VARCHAR(100),
+  sal INT
+)
+ WITH 
+   (DATA_SOURCE=AZURESTORAGE,
+   FILE_FORMAT=EMPFILE,
+   LOCATION='/emp/'
+   )
+
+select * from extemp
+
+
+
+CTAS--create table as select
+
+CREATE Table Dimemp
+with (distribution=round_robin)
+As select * from extemp
+
+SELECT * FROM Dimemp

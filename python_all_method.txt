@@ -1,0 +1,258 @@
+
+PySpark, the Python library for Apache Spark, provides several methods and functions for working with distributed data processing. Here is a list of commonly used methods in PySpark:
+
+DataFrame Methods:
+
+select *,  DATEDIFF(YY,DOJ,GETDATE()) as getdates,DATEDIFF(YY,DOB,GETDATE())as get_dob from Emp_date where DATEDIFF(YY,DOJ,GETDATE()) >3
+select * from (select city,yrs,sales from povit_emp) as converting_pivoted pivot(sum(sales) for yrs in ([2022],[2023])) as yrsdate
+
+show(): Displays the content of the DataFrame in a tabular format.
+printSchema(): Prints the schema of the DataFrame.
+select(): Selects specific columns from the DataFrame.
+filter(): Filters the DataFrame based on a condition.
+groupBy(): Groups the DataFrame by specified columns.
+orderBy(): Sorts the DataFrame by specified columns.
+join(): Performs a join operation between two DataFrames.
+distinct(): Returns distinct rows from the DataFrame.
+count(): Returns the count of rows in the DataFrame.
+agg(): Performs aggregate operations on the DataFrame (e.g., sum, average, count).
+RDD (Resilient Distributed Dataset) Methods:
+
+collect(): Returns all the elements in the RDD to the driver program.
+map(): Transforms each element of the RDD using a function.
+filter(): Filters the elements of the RDD based on a condition.
+reduce(): Aggregates the elements of the RDD using a specified function.
+count(): Returns the count of elements in the RDD.
+distinct(): Returns distinct elements from the RDD.
+sortBy(): Sorts the elements of the RDD.
+union(): Performs the union of two RDDs.
+intersection(): Returns the intersection of two RDDs.
+foreach(): Applies a function to each element of the RDD.
+SparkContext Methods:
+
+textFile(): Reads a text file and returns an RDD.
+parallelize(): Creates an RDD from a Python list or collection.
+broadcast(): Broadcasts a read-only variable to the cluster nodes.
+accumulator(): Creates a shared variable that can be updated in parallel.
+setLogLevel(): Sets the log level for Spark.
+
+DataFrameWriter Methods:
+
+format(): Specifies the output data source format.
+mode(): Specifies the behavior when the output data already exists.
+save(): Saves the DataFrame to a specified location.
+partitionBy(): Partitions the output data by specified columns.
+bucketBy(): Buckets the output data by the specified column values.
+DataFrameReader Methods:
+
+format(): Specifies the input data source format.
+load(): Reads data from a specified location.
+schema(): Specifies the schema for the input data.
+SparkSession Methods:
+
+builder(): Creates a SparkSession builder.
+appName(): Sets the name of the Spark application.
+config(): Sets a configuration property for Spark.
+enableHiveSupport(): Enables Hive support for Spark SQL.
+Window Functions:
+
+over(): Specifies the window partitioning and ordering for window functions.
+row_number(): Assigns a unique sequential number to each row in a window.
+rank(): Assigns a rank to each row based on the specified ordering.
+lag(): Accesses the value of a previous row within a window.
+lead(): Accesses the value of a following row within a window.
+Machine Learning Methods:
+
+VectorAssembler(): Assembles a vector of input features from multiple columns.
+StringIndexer(): Encodes a string column into a numerical index column.
+OneHotEncoder(): Encodes categorical features using a one-hot encoding scheme.
+IndexToString(): Converts a numerical index column back to the original string values.
+Pipeline(): Chains multiple stages of transformations and estimators into a single pipeline.
+fit(): Trains a machine learning model on a DataFrame.
+transform(): Applies a trained model to transform a DataFrame.
+
+String Functions:
+
+concat(): Concatenates multiple string columns.
+substring(): Extracts a substring from a string column.
+trim(): Removes leading and trailing whitespace from a string column.
+lower(): Converts a string column to lowercase.
+upper(): Converts a string column to uppercase.
+split(): Splits a string column into an array of substrings based on a delimiter.
+Date and Time Functions:
+
+year(): Extracts the year from a date or timestamp column.
+month(): Extracts the month from a date or timestamp column.
+day(): Extracts the day of the month from a date or timestamp column.
+hour(): Extracts the hour from a timestamp column.
+minute(): Extracts the minute from a timestamp column.
+second(): Extracts the second from a timestamp column.
+date_format(): Formats a date or timestamp column to a specified format.
+SQL Functions:
+
+col(): Retrieves a column from a DataFrame based on its name.
+lit(): Creates a literal value column.
+when(): Evaluates a condition and returns a value based on the condition.
+isNull(): Checks if a column is null.
+isNotNull(): Checks if a column is not null.
+groupBy(): Groups the DataFrame by specified columns.
+sum(): Computes the sum of values in a column.
+avg(): Computes the average of values in a column.
+max(): Retrieves the maximum value in a column.
+min(): Retrieves the minimum value in a column.
+Window Functions:
+
+partitionBy(): Specifies the partitioning column(s) for a window function.
+orderBy(): Specifies the ordering column(s) for a window function.
+rowsBetween(): Specifies the range of rows to include in a window function.
+first(): Retrieves the first value in a window.
+last(): Retrieves the last value in a window.
+dense_rank(): Computes the dense rank of a row within a window based on the specified ordering.
+
+
+DataFrameStatFunctions:
+
+corr(): Computes the correlation between two columns.
+cov(): Computes the covariance between two columns.
+approxQuantile(): Computes the approximate quantiles of a numerical column.
+crosstab(): Computes a contingency table for two columns.
+freqItems(): Computes frequent items for columns in a DataFrame.
+range(): Creates a DataFrame with a range of values.
+sql(): Executes a SQL query on a DataFrame.
+newSession(): Creates a new SparkSession.
+
+
+udf(): Registers a user-defined function.
+pandas_udf(): Registers a user-defined function that operates on Pandas DataFrame.
+Broadcast Variables:
+
+Broadcast(): Creates a broadcast variable.
+value(): Accesses the value of a broadcast variable.
+DataFrameNaFunctions:
+
+drop(): Drops rows containing null or NaN values.
+fill(): Fills null or NaN values with specified values.
+replace(): Replaces specific values in a DataFrame.
+
+StandardScaler(): Scales features to have zero mean and unit standard deviation.
+parquet(): Saves the DataFrame to a Parquet file.
+orc(): Saves the DataFrame to an ORC file.
+json(): Saves the DataFrame to a JSON file.
+csv(): Saves the DataFrame to a CSV file.
+insertInto(): Inserts the DataFrame into an existing table.
+table(): Reads a table from a JDBC database and returns a DataFrame.
+DataFrameReader Methods:
+
+table(): Registers a table from a DataFrame for querying with SQL.
+catalog(): Accesses the catalog to interact with database and table metadata.
+udf(): Registers a user-defined function.
+stop(): Stops the SparkSession.
+DataFrame Transformation Methods:
+
+na(): Handles missing values in the DataFrame.
+sample(): Samples a fraction of rows from the DataFrame.
+rollup,
+
+approxSimilarityJoin(): Performs approximate similarity join on two DataFrames.
+randomSplit(): Splits the DataFrame into random subsets based on weights.
+crossJoin(): Performs a cross join between two DataFrames.
+repartition(): Repartitions the DataFrame based on specified columns.
+persist(): Persists the DataFrame in memory or disk for faster access.
+toDF(): Converts a list of tuples or a pandas DataFrame to a DataFrame.
+Window Functions:
+
+first_value(): Retrieves the first value in a window.
+last_value(): Retrieves the last value in a window.
+nth_value(): Retrieves the value at a specified position in a window.
+percent_rank(): Computes the percent rank of a row within a window.
+cume_dist(): Computes the cumulative distribution of a value within a window.
+Broadcast Variables:
+
+value(): Retrieves the value of a broadcast variable.
+unpersist(): Removes a broadcast variable from memory.
+Machine Learning:
+
+TrainValidationSplit(): Performs train-validation split for model selection.
+CrossValidator(): Performs k-fold cross-validation for model selection.
+BinaryClassificationEvaluator(): Evaluates binary classification models.
+MulticlassClassificationEvaluator(): Evaluates multiclass classification models.
+RegressionEvaluator(): Evaluates regression models.
+GBTRegressor(): Gradient-Boosted Tree regression model.
+RandomForestClassifier(): Random Forest classification model.
+KMeans(): K-means clustering algorithm.
+ALS(): Collaborative filtering using Alternating Least Squares.
+PipelineModel(): Represents a fitted pipeline model.
+Streaming:
+
+readStream(): Reads a continuous stream of data as a DataFrame.
+writeStream(): Writes a continuous stream of data from a DataFrame.
+trigger(): Specifies the trigger interval for a streaming query.
+outputMode(): Specifies the output mode for a streaming query (e.g., append, update, complete).
+These are additional methods commonly used in PySpark for data manipulation, window functions, broadcasting, machine learning, and streaming. PySpark provides a rich set of methods and functionalities to handle a wide range of data processing and analysis tasks in a distributed computing environment.
+
+join(): Performs an inner, outer, left, or right join between two DataFrames.
+union(): Returns a new DataFrame by appending rows of another DataFrame.
+intersect(): Returns a new DataFrame with rows that exist in both DataFrames.
+except(): Returns a new DataFrame with rows from the first DataFrame that are not present in the second DataFrame.
+orderBy(): Sorts the DataFrame based on specified columns.
+groupBy(): Groups the DataFrame by specified columns for aggregation.
+agg(): Performs aggregation on grouped data.
+
+drop(): Drops rows containing null or NaN values.
+fill(): Fills null or NaN values with specified values.
+replace(): Replaces specific values in a DataFrame.
+
+corr(): Computes the correlation between two columns.
+cov(): Computes the covariance between two columns.
+histogram(): Computes the histogram of a numerical column.
+
+range(): Creates a DataFrame with a range of values.
+createDataFrame(): Creates a DataFrame from a list, pandas DataFrame, or RDD.
+sql(): Executes a SQL query on a DataFrame.
+table(): Reads a table from a JDBC database and returns a DataFrame.
+newSession(): Creates a new SparkSession.
+SQL Functions:
+
+substring_index(): Extracts a substring from a string column based on a delimiter.
+coalesce(): Returns the first non-null argument from the given columns.
+concat_ws(): Concatenates multiple string columns using a specified delimiter.
+date_add(): Adds a specified number of days to a date column.
+datediff(): Calculates the number of days between two date columns.
+
+
+groupBy(): Groups the DataFrame by specified columns for aggregation.
+pivot(): Pivots a DataFrame by rotating the values of a column into multiple columns.
+cube(): Creates a cube (multi-dimensional aggregation) on specified columns.
+rollup(): Creates a rollup (multi-level aggregation) on specified columns.
+dropDuplicates(): Removes duplicate rows from the DataFrame.
+dropna(): Drops rows containing null or NaN values.
+fillna(): Fills null or NaN values with specified values.
+replace(): Replaces specific values in the DataFrame.
+approxQuantile(): Computes the approximate quantiles of a numerical column.
+sample(): Samples a fraction of rows from the DataFrame.
+DataFrameWriter Methods:
+
+mode(): Specifies the write mode for saving the DataFrame.
+option(): Sets a configuration option for saving the DataFrame.
+save(): Saves the DataFrame to a specific location.
+SparkSession Methods:
+
+appName(): Sets the name of the application.
+config(): Sets a configuration property for the SparkSession.
+enableHiveSupport(): Enables Hive support for the SparkSession.
+
+StringIndexer(): Encodes a string column into a numerical index column.
+OneHotEncoder(): Encodes categorical features using a one-hot encoding scheme.
+VectorAssembler(): Assembles a vector of input features from multiple columns.
+StandardScaler(): Scales features to have zero mean and unit standard deviation.
+IndexToString(): Converts a numerical index column back to the original string values.
+GBTRegressor(): Gradient-Boosted Tree regression model.
+RandomForestClassifier(): Random Forest classification model.
+CrossValidator(): Performs k-fold cross-validation for model selection.
+Streaming:
+
+readStream(): Reads a continuous stream of data as a DataFrame.
+writeStream(): Writes a continuous stream of data from a DataFrame.
+format(): Specifies the format for reading or writing streaming data.
+outputMode(): Specifies the output mode for a streaming query (e.g., append, update, complete).
+start(): Starts the execution of a streaming query.

@@ -1,0 +1,741 @@
+ectraction and load the data--adf (dataingestions)
+transformation with store procedure
+big data analytics (bp+rp)
+1.azure data lake ananalytic --adla-(u-sql)
+2.azure+dadabricks(spark analytics) structure data
+sap ecc-->sap slt-->sap hana db-->adf-->adls-->sp-->asql-->db-->power bi
+sap ecc-->sap slt-->ap han db-->adb-->adls/sql-->power bi 
+use a single lang and multi languge supports
+venky--python
+ram--scla,
+ravi-sql
+ramu--r
+
+job cluster: when we create entire during process
+exixting intractivecluster:this cluster should be created by developer or programmers with manually in data bricks
+
+we rea connectin to the azure data bricks to adf with help of acces token key
+in ADB--go to setting --user setting--generate acces key and it copy into adf compute lks services
+
+acces token:dapifaca3ab8ba14cf77e377ab1ddb612188-3 
+
+LS SERVICES:
+
+ACCESSTOKEN:generates adf from adb user setting copy that
+managed ervices id:in adb- in access control (iam) addrole assignment-contributer-select-adfwith12-selectit
+
+notebook browse:/shared/emp/data
+@concat('/nestle/shared/emp/data/orders/',formatDateTime(utcnow(),'yyyymmdd'))
+parameter:/nestles/data/processed/orders/
+
+in communicity data bricks we created cluster is limited etc.
+without creation of cluster we cannot execute the programs in azure data bricks
+a=10
+if a%1==0
+print(a:"even number")
+else
+print(a:"odd numbers")
+
+cluster mode:
+high concurrency
+standard mode
+single mode etc
+
+name_columns=['Id','name','q1_sales','q2_sales','q3_sale','sales_orders']
+pivot_columns=[x for x in name_columns if x!='Id' if x!='name']
+print(pivot_columns)
+
+in data bricks by default python with sql which is called as magic command
+
+widgets it is the concept of data bricks and it is not concpt of python ,sql and scala etc.
+
+databricks utilities
+1.widgets utility
+2.file system utility
+3.security and key vault utility
+4.note book utility
+
+dbutils.help()
+
+dbutils.widgets provides utilities for working with notebook widgets. You can create different types of widgets and get their bound value. For more info about a method, use dbutils.widgets.help("methodName").
+combobox(name: String, defaultValue: String, choices: Seq, label: String): void -> Creates a combobox input widget with a given name, default value and choices
+dropdown(name: String, defaultValue: String, choices: Seq, label: String): void -> Creates a dropdown input widget a with given name, default value and choices
+get(name: String): String -> Retrieves current value of an input widget
+getArgument(name: String, optional: String): String -> (DEPRECATED) Equivalent to get
+multiselect(name: String, defaultValue: String, choices: Seq, label: String): void -> Creates a multiselect input widget with a given name, default value and choices
+remove(name: String): void -> Removes an input widget from the notebook
+removeAll: void -> Removes all widgets in the notebook
+text(name: String, defaultValue: String, label: String): void -> Creates a text input widget with a given name and default value
+
+dbutils.widgets.help('get')
+dbutils.widgets.text('target','venkanna',label='pk')
+df_utils=dbutils.widgets.get('target')
+print(df_utils)
+
+y=10
+if int(y)%2==0;
+print("the given no.is even {}:is",format(y))
+else:
+print("the given no is odd {}:is",format(y))
+
+dbutils.widgets.removeall()
+print("target path is {},pkey path is pkey and skey is {}",format(tagret,peky,skey))
+
+**dbutils file systems are two type:
+1.fsutils:cp
+Is,
+mkdires,
+mr,
+put,
+rm
+2.mount
+mount,
+mounts,
+unmounts,
+update mount,
+refresh mount
+
+dbutils.fs.mkdirs('Filesystem/sapmle/data')
+
+mount point creation:
+
+dbutils.fs.mkdirs('/mnt/blobsacc')
+
+StorageAccountName='storagemountacc12',
+StorageAccountAccessKey='bfRjP/VZhIY7T8FXzJclq0EC9hZHPBZKZnJmR/1meMoZRwgT7hxp8qVF9xZ35X4GdsOhGvfTYbJO+AStpQrv9Q==',
+BlobConatinerName='raw'
+
+dbutils.fs.mount(source='wasbs://{}@{}.blob.core.windows.net'.format(BlobConatinerName,storagemountacc12),
+                 mount_point='/mnt/blobsacc/',
+                 extra_configs={'fs.azure.account.key'+BlobConatinerName+ '.blob.core.windows.net': 'StorageAccountAccessKey'})
+
+
+databricks note books:
+
+3 types of note books:
+
+1.variable creation
+2.log file creation
+3.main note book
+
+dbutils.notebook.help()
+-->exist
+-->run
+dbuitls.notebook.help()
+dbutils.notbook.run()
+dbutils.notebook.exist()
+
+%run "/filestore/empfile/products.csv"
+source="10,"
+target="5"
+dbutils.notebook.exit(source+target)
+
+databricks dbutils:
+
+1.widgets
+text,get,removeall
+
+2.filesystem
+fs:
+cp,mv,rm,mkdirs,header,Is
+mount:
+mount,unmount,refreshmount(),mounts.
+
+3.note boos:
+run,exit
+%run path
+
+4.scope/secrete:dbutils.secret
+before we creation of scope/secrete we entered url is:https://community.cloud.databricks.com/?o=71602147289391#secrets/createScope
+mount
+configuration-->sensitive information
+clientId
+clientkeys-->secrete(key vault)
+endpoint.
+create azure key vault URI:(copy resourceid and keyvaulturl) paste into databricks(#secrets/createScope)
+--------------------------------------------------------------------------------------------------------------------
+# import necessary packages
+from azure.identity import DefaultAzureCredential
+from azure.keyvault.secrets import SecretClient
+
+# set Key Vault URL and secret name
+keyvault_url = "https://<your-key-vault-name>.vault.azure.net/"
+secret_name = "<your-secret-name>"
+
+# create a credential object using the Azure CLI authentication method
+credential = DefaultAzureCredential()
+
+# create a Key Vault client object
+client = SecretClient(vault_url=keyvault_url, credential=credential)
+
+# retrieve the secret value
+secret_value = client.get_secret(secret_name).value
+
+# print the secret value
+print(secret_value)
+--------------------------------------------------------------------------------
+apache spark:
+compute engine withset of rich library
+to dustribute/parallel data processing on your computer cluster
+and it is frame work
+previously we used HADOOP is the big data system
+map reduce:
+to spli into multiple task innto small task on your comuter cluster
+this concept used in java applicatons etc
+
+Batch processing:batch processing in data bricks refers to the execution of series of data processing in 
+jobs on schudle and
+
+Azure Data Engineer is responsible for building and maintaining data pipelines, data warehouses, and data lakes on the Azure platform.
+ They should have a strong understanding of SQL, data modeling, ETL processes, and Azure services such as Azure Data Factory, Azure Da
+tabricks, and Azure Synapse Analytics.
+---------------------------------------------------------
+passenger_list = {"Ross": 35, "Monica": 50, "Chandler": 43, "Joey": 42, "Rachel": 38}
+
+senior_citizens = {name: age for name, age in passenger_list.items() if age >= 45}
+
+print("Senior Citizens:")
+for name in senior_citizens:
+    print(name)
+
+=========================================================
+SELECT teamname, COUNT(CASE WHEN won IS NULL THEN 1 END) AS "lost", COUNT(CASE WHEN won = 1 THEN 1 END) AS "won"
+FROM (
+    SELECT teamA AS teamname, won FROM ipl_results
+    UNION ALL
+    SELECT teamB AS teamname, CASE WHEN won = 1 THEN 0 ELSE 1 END AS won FROM ipl_results
+) AS combined_results
+GROUP BY teamname
+
+spark:spark is unified compute engine and data parallel processing
+features of spark:
+1.speed
+2.power full caching
+3.deployment
+4.real time 
+5.poly glot
+6.scalable
+master node(driver node): it is mean is that collection of salve nodes(including tab1 and tab2 etc) wich is called as master nodes.
+worker node:task,cache
+contorlnode:task,cache
+
+lazy evalution:to delayed the execution of data transfermation in pyspark.
+
+Fault tolerance:fault tolerance ensures that Spark applications can continue to process data and
+produce results even if some nodes in the cluster fail or some tasks fail due to errors.
+
+what is RDD?
+rdd stands for (resilient distrubuted dataset) it is fundamental big data processing system in apsche spark
+and it is immutable ,fault tolerance collection of objects parllel across the multiple nodes in clusters
+rdd is created from across the data frame,dbfs file system and local file system i twill supported by spark.
+
+features of RDDs:
+lazy evaluation
+fault tolerance
+immutable
+partitioning
+persistence
+
+creation of rdd in a spark three ways:
+creation of rdd from collections:
+ceation of rdd from collection by using the sc.parallelize() methos in pyspark
+here it is examples:
+rdd_data=["rai","magi","ven","rai"]
+df=rdd_data.collect()
+output:["rai","magi","ven","rai"]
+print(df,type(df))-list
+df1=sc.parallelize(df)
+rdd_range=sc.parallelize(range(10))
+print(rdd_range,type(rdd_range))
+df=rdd_range.sum()
+df=rdd_range.take(7)
+df=rdd_range.count()
+print(df,type(df))
+
+creation of rdd from text file:
+by creation of rdd from textFile by suing the metheod is sc.textFile
+
+rdd_txtfile=sc.textFile("/filstore/data/emp.csv")
+rdd_txtfile=sc.textFile("/filstore/data/data.csv,/filstore/data/emp.csv")
+
+rdd_txfile.count()
+rdd_txfile.getNumPartitions()-3
+rdd_txfile.collect()
+eno,ename
+1,venky
+
+df=sc.txtfile.take(4)
+files=rdd_txtfile.collect()
+for i in files:
+print(i.split(",")
+
+files=rdd_txtfile.collect()
+for i in files:
+if 'c_id' not in i.split(","):
+if j in i.split(","):
+print(j)
+
+creating rdd from another rdd:
+data_rdd=sc.parallelize()
+rdd_df=data_rdd.map(lambda x:x*2)
+rdd_df.getNumPartitions()
+rdd_df.take(4)
+rdd_df.count()
+df_rdd=rdd_df.collect()
+for i in df_rdd:
+print(i.split(",")/
+if 'c_id'not in i.split(",")
+if j in i.split(","):
+print(j)
+
+RDD Pairs:
+a=sc.textFile("filestore/data/emp.csv")
+a.collect()
+b=sc.parallelize([("a",200),("b",300),("c",400),("d",500)])
+b.collect()
+c=sc.parallelize([("a",200),("b",300),("c",400),("d",600)])
+c.collect()
+rdd_join=b.join(c)
+rdd_join.collet()
+
+join_rdd=c.join(b)
+join_rdd.collect()
+
+uploadfile=sc.textFile("dbfs:/FileStore/sales12.csv")
+df=uploadfile.collect()
+adf_l=[]
+for i in df:
+    if 'product' in i:
+        adf_l.append(i)
+        for w in adf_l:
+            print(w)
+        print("the number of files counted in that one is :" ,len(adf_l))
+--------------------------------------------------------------------------------
+uploadfile = sc.textFile("dbfs:/FileStore/emp.txt")
+
+# collect the data into a list of rows
+df = uploadfile.collect()
+
+# define the word to search for
+p = "eno"
+
+# create a list to hold the lines that contain the word
+adf_l = []
+
+# take the lines for azure word
+for row in df:
+    if p in row:
+        adf_l.append(row)
+
+# create a list to hold the count of occurrences of the word
+adls_l = []
+
+# take the azure word from the list
+for row in adf_l:
+    dw = row.split(",")
+    n = dw.count(p)
+    adls_l.append(n)
+
+# calculate the total number of occurrences of the word
+total_count = sum(adls_l)
+
+print(f"the number of files counted in that one is: {total_count}")
+-------------------------------------------------------------------------
+line count ofr specefic word:
+
+rdd_struct=sc.textFile("dbfs:/FileStore/customer.csv")
+rdd_struct.collect()
+rdd_filtr=rdd_struct.filter(lambda a:"c_id" in a)
+rdd_filtr.count()
+---------------------------------------------------
+in side of each value:
+
+rdd_struct=sc.textFile("dbfs:/FileStore/customer.csv")
+#header_list=list(rdd_struct.first())
+header_list=eval('["'+rdd_struct.first()+'"]')
+datalist=rdd_struct.collect()
+header_list.extend(datalist)
+header_list
+--------------------------------------------------------
+l_rd=sc.parallelize(range(7))
+l_dr=sc.parallelize(range(7,20))
+combined_rdd=l_rd.union(l_dr)
+----------------------------------------------
+
+Narrow transeframations:
+map(),sample(),union,distinct(),mappartition(),flatmap() etc
+wide transfermations:
+join(),filter(),groupby,orderby,drop,select,delete,disinct,withcolumns(),coalesce,cartsian()
+----------------------------------------------------------------------------------------------------
+Data Frame:data frame is the two dimensional data structures in the form of rows and columns 
+for implementing the data frame by using the rr,python and sql langugages which is called as 
+data frame
+df=spark.read.format('csv').option('header','true').option('inferschema','true').load("dbfs:/filestore/data/emp.csv")
+df.show()
+dispaly(df)
+df.printschema()
+df.schema-to represents the data type like it is the structtype([strucyfield('ram' stingtype(),ture])
+
+create data frame own:
+l=[(1,'ram'),(2,'roy'),(3,'jai')]
+schema=['eno',''name]
+df=spark.createDataFrame(l,shema=schema)
+df.show()
+df.printschema()
+df.schema
+df.collect()
+---------------------------------------------------------------------------------------------------------------------------
+To select the multiple files in adb:
+mul_df=spark.read.format('csv').option('header','true').option('inferschema','true').load("dbfs:/filestore/data/emp*.csv")
+mul_df.show()
+mul_df.collect()
+mul_df.first()
+---------------------------------------------------------------------------
+df_emp=spark.write.format('csv').option('header','true').mode('append').save("dbfs://filestore/tables/dept.csv")
+
+dispaly(df_emp).show()
+we can sea the path in adb:
+dbutils.fs.ls(dbfs://filestore/tables/dept.csv)
+df_dept=df_emp.write.format('csv').option('header','true').mode(overwrite).save("dbfs://filestore/tables/dept.csv")
+display(df_dept).show()
+---------------------------------------------------------------------------
+files are transfers to the source to destination in a databricks:
+
+   srcfile:"dbfs://filestore/tables/Inbound"   Tgrfile:"dbfs://filestore/tables/Outbound"
+
+dbutils.widgets.text("Srcfile")
+dbutils.widgets.text("Tgtkfile")
+src_path=dbutils.widgets.get(Srcfile)
+tgt_path=dbutils.widgets.get(Tgtfile)
+print("source path=",src_path,"source path=",tgt_path)
+
+to store the files in list/any other
+
+list_file=dbutils.fs.ls(src_path)
+for f in range(0,len(list_file)):
+print(list_file[f])
+
+how to sea the no.of files in adb:
+
+dbutils.fs.ls(src_path)
+list_file=dbutils.fs.ls(src_path)
+for f in range(0,len(list_file)):
+    print(list_file[f].path)
+    #print(list_file[f].name)
+    df_all=spark.read.format("csv").option("header","true").load(list_file[f].path)
+    print(list_file[f].name,"Count of file:" ,df_all.count())
+
+how to replace the file names:
+
+import re
+file_name='dept_1.csv'
+#print(file_name.replace(".csv","").replace("[0-9]",""))
+print(re.sub("[0-9]","",file_name))
+
+fileC=re.sub("[0-9]","",file_name)
+objname=re.sub("_.csv","",fileC)
+print("objname",objname)
+
+how to write the no.of file into the target in adb:
+
+import re
+list_file=dbutils.fs.ls(src_path)
+for f in range(0,len(list_file)):
+  
+    file_name=list_file[f].name
+    fileC=re.sub("[0-9]","",file_name)
+    objname=re.sub("_.csv","",fileC)
+    print("objname",objname)
+
+    df_all=spark.read.format("csv").option("header","true").load(list_file[f].path)
+    df_all.write.format("csv").option("header","true").mode("overwrite").save(snk_path+objname)
+---------------------------------------------------------------------------------------------------------------------------
+Readinhg source file details from lookup:
+try:
+df_lookup=spark.read.format("csv").option("headr",'true').load("dbfs://filestore/tebles/src_file/lookupfile.csv")
+try:
+#print(df)
+trg_path="dbfs://filestore/tebles/src_file"
+df_lookup.collect()
+for i in range(0,len(df_lookup)):
+print(df_lookup[i][0])
+src_path=spark.read.format("csv").option("header","true").load(df_lookup[i][0]+df_lookup[i][1]+"+.csv")
+src_path.write.format("csv").option("header","true").save(trg_path+df_lookup[i][1])
+except:
+print("file lookup in that one note book is not availabe from source")
+except:
+print("note book is not vaialabel in that one it is file/folder from source")
+------------------------------------------------------------------------------------------------
+fd_one=spark.read.format("csv").option("header","true").load("dbfs://Filestore/tables/sales_Inv.csv")
+for i in range(0,len(fd_one)):
+print(fd_noe[i].name)
+if(fd_one.startswith("_")):
+dbutils.fs.rm(fd_one)
+dispaly(fd_one)
+----------------------------------------------------------------------------
+delta lake concept:src to trg:
+
+df_dd=spark.read.format("csv").option("header","true").load("dbfs:/FileStore/tables/projects/EMPS_1.CSV")
+display(df_dd)
+
+dd=spark.write.format("csv").option("header","true").mode("append").save("dbfs:/FileStore/tables/emp_data/")
+display(dd)
+
+dd.read.format("csv").option("header","true").load("dbfs:/FileStore/tables/emp_data/")
+display(dd)
+
+df_dd.createOrReplaceTempView("src")
+dd.createOrReplaceTempView("trg")
+
+%sql
+select * from src
+select * from trg
+
+select * from src left join trg on(src.eno=trg.eno) whre src.eno is null
+%sql
+select *from trg right join src on(trg.eno=src.eno) where trg.eno is null
+
+src_nodata_change=spark.sql("select src.* from src right join trg on(src.eno=trg.eno) where trg.eno is null")
+
+trg_datanotchange=spark.sql("select trg.* from trg right join src on(src.eno=trg.eno) where src.eno is null")
+
+try:
+    ltg=dbutils.fs.ls("dbfs:/FileStore/tables/data_rr/")
+    dd=spark.read.format("csv").option("header","true").load("dbfs:/FileStore/tables/data_rr/")
+    except:
+        print("this is your intial loading....")
+        ltg=[("null"),("null")]
+        dd.createDataFrame(ltg,src_nodata_change.schema)
+--------------------------------------------------------------------------------------------------------
+widgets and creation value in adb:
+
+dbutils.widgets.text("srcpath","","")
+srcpath=dbutils.widgets.get("srcpath")
+dbutils.widgets.text("trgpath","","")
+trgpath=dbutils.widgets.get("trgpath")
+dbutils.widgets.text("filename","","")
+filename=dbutils.widgets.get("filename")
+srcpathfilename=srcpath+filename+"*.csv"
+print("source path:{},target path:{},filename:{},srcfilname:{} ".format(srcpath,trgpath,filename,srcpathfilename))
+
+source data from creation csv files:
+
+try:
+    src_df = spark.read.format("csv").option("header", "true").option("inferschema", "true").load(srcpathfilename)
+    print("srcfile counted:", src_df.count())
+except Exception as e:
+    print("Notebook failed due to the following exception:")
+    print("Error message:", e)
+    raise e
+--------------------------------------------------------------------------------------------
+
+try:
+    TrgPathExists = dbutils.fs.ls(trgpath+fiename)
+    trgpath = spark.read.format("csv").option("header", "true").option("inferschema", "true").load(TrgPathExists)
+    print("target path is count:", trgpath.count())
+except Exception as e:
+    print("Notebook failed due to the following exception:")
+    print("Error message:", e)
+    raise e
+else:
+    if TrgPathExists:
+        print("Target file exists")
+    else:
+        trgpath = spark.createDataFrame([], schema=src_df.schema)
+        print("Count is:", trgpath.count())
+------------------------------------------------------------------------------------
+pkeys = "ecd,ece"
+pklist = pkeys.split(",")
+print(pklist)
+for i in range(0, len(pklist)):
+    print("pklist is " + pklist[i])
+
+pkeys = "ecd,ece"
+pklist = pkeys.split(",")
+filters=""
+print(pklist)
+for i in range(0, len(pklist)):
+    filters=filters+"src."+pklist[i]+ "is null"
+    print(filters[:len(filters)-4])
+   #print("pklist is " + pklist[i])
+-------------------------------------------------------
+pklist = pkeys.split(",")
+filters=""
+joins=""
+print(pklist)
+for i in range(0, len(pklist)):
+    filters=filters+"src."+pklist[i]+ "is null and"
+    print(filters[:len(filters)-4])
+joins=joins+"trg."+pklist[i]+"=src."+pklist[i]+"is null and "
+print(joins[:len(joins)-5])
+------------------------------------------------------------------------------------
+write the dat into the target:
+src_Upsert=src_df.write.format("csv"),option("header","true").mode("overwrite").save(srcpath+filename)
+
+dispaly(src_Upsert).show()
+----------------------------------------------------------------------------------------------------------
+
+import pyodbc
+import pandas as pd
+from azure.storage.blob import BlockBlobService
+
+# Set up the Azure SQL Database connection
+server = '<server_name>.database.windows.net'
+database = '<database_name>'
+username = '<username>'
+password = '<password>'
+driver= '{ODBC Driver 17 for SQL Server}'
+connection_string = f"DRIVER={driver};SERVER={server};DATABASE={database};UID={username};PWD={password}"
+
+# Connect to the Azure SQL Database using pyodbc
+cnxn = pyodbc.connect(connection_string)
+
+# Set up the blob storage connection
+account_name = '<storage_account_name>'
+account_key = '<storage_account_key>'
+container_name = '<container_name>'
+blob_name = '<blob_name>'
+block_blob_service = BlockBlobService(account_name=account_name, account_key=account_key)
+
+# Download the file from blob storage
+blob_content = block_blob_service.get_blob_to_text(container_name, blob_name).content
+
+# Convert the file content to a DataFrame
+df = pd.read_csv(blob_content)
+
+# Write the data to Azure SQL Database
+table_name = '<table_name>'
+df.to_sql(table_name, cnxn, if_exists='replace', index=False)
+----------------------------------------------------------------------------------------------
+Creating a table with selecting path:
+
+spark.sql("DROP TABLE IF EXISTS diamonds")
+spark.sql('''
+    CREATE TABLE diamonds
+    USING csv
+    OPTIONS (
+        path "/databricks-datasets/Rdatasets/data-001/csv/ggplot2/diamonds.csv",
+        header "true"
+    )
+''')
+
+Display the data:
+
+display(spark.sql("SELECT * from diamonds"))
+
+Create delta table:
+
+diamonds = spark.read.csv("/databricks-datasets/Rdatasets/data-001/csv/ggplot2/diamonds.csv", header="true", inferSchema="true")
+diamonds.write.format("delta").mode("overwrite").save("/delta/diamonds")
+
+spark.sql("DROP TABLE IF EXISTS diamonds")
+spark.sql('CREATE TABLE diamonds USING DELTA LOCATION \'/delta/diamonds/\'')
+
+query:
+
+%sql
+SELECT color, avg(price) AS price FROM diamonds GROUP BY color ORDER BY color
+
+Select the design type:
+
+%python
+from pyspark.sql.functions import avg
+
+display(diamonds.select("color","price").groupBy("color").agg(avg("price")).sort("color"))
+
+---------------------------------------------------------------------------------------------------------------
+azuresql to databricks:
+
+dbName = 'sqlserveradb12'
+dbserverName = 'databrickstoazuresql.database.windows.net'
+UserName = 'abc'
+Pwd = 'Venkanna@3370'
+dbPort = '1433'
+Jdbcurl = 'jdbc:sqlserver://' + dbserverName + ':' + dbPort + ';database=' + dbName + ';user=' + UserName + ';password=' + Pwd
+url = 'jdbc:sqlserver://' + dbserverName + ':' + dbPort + ';database=' + dbName + ';user=' + UserName + ';password=' + Pwd
+
+read the data:
+
+Temp_emp="(select * from employee) views"
+emp_data=spark.read.jdbc(url,table=Temp_emp)
+display(emp_data)
+
+write the data into azure sql:
+
+emp_data.write.mode('overwrite').jdbc(url, 'dbo.data_emp', properties={"truncate": "true"})
+
+agian read the data:
+
+data_Remp=spark.read.jdbc(url,table="(select * from dbo.data_emp) views")
+display(data_Remp)
+
+Finding Individual names:
+
+df1=df.select(df.schema.names)
+display(df1)
+--------------------------------------------------------------------------------------------------------------------------------
+Generate the identity key  from source to target in databricks:
+
+from pyspark.sql.functions import monotonically_increasing_id
+
+# Read the source file
+source_data = spark.read.csv("path_to_source_file.csv", header=True)
+
+# Add identity values
+source_data_with_identity = source_data.withColumn("identity", monotonically_increasing_id())
+-----------------------------------------------------------------------------------------------------------------
+SCD TYPE-3:
+
+create table:
+
+CREATE TABLE customer_dimension (
+  CustomerID INT,
+  Name STRING,
+  StatusCurrent STRING,
+  StatusPrevious STRING
+)
+USING DELTA;
+-----------------------------------
+Inserted the data:
+
+INSERT INTO customer_dimension
+VALUES (1, 'John', 'Active', NULL),
+       (2, 'Jane', 'Active', NULL);
+
+-----------------------------------------------------
+updated the status:
+
+UPDATE customer_dimension
+SET StatusCurrent = 'Inactive'
+WHERE CustomerID = 1;
+
+-- Update the previous status
+UPDATE customer_dimension
+SET StatusPrevious = 'Active'
+WHERE CustomerID = 1;
+-------------------------------------------------------------
+query the custdimensions:
+
+SELECT CustomerID, Name, StatusCurrent, StatusPrevious
+FROM customer_dimension;
+
++----------+------+--------------+----------------+
+|CustomerID| Name | StatusCurrent| StatusPrevious |
++----------+------+--------------+----------------+
+|    1     | John |   Inactive   |     Active     |
+|    2     | Jane |   Active     |     NULL       |
++----------+------+--------------+----------------+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

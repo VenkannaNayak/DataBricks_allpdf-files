@@ -1,0 +1,15 @@
+DECLARE @StartDates DATE = '1999-01-01';
+DECLARE @EndDates DATE = '2024-01-31';
+
+WITH DateSequence AS
+(
+    SELECT @StartDates AS DateValue
+    UNION ALL
+    SELECT DATEADD(day, 1, DateValue)
+    FROM DateSequence
+    WHERE DateValue BETWEEN @StartDates AND @EndDates
+)
+
+SELECT concat(day(DateValue),month(DateValue),year(DateValue)) as Datekey,DateValue,year(DateValue) as Year
+into DimDate FROM DateSequence
+OPTION (MAXRECURSION 0);

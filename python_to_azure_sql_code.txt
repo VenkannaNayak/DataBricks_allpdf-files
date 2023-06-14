@@ -1,0 +1,108 @@
+import pyodbc
+import pandas as pd
+from azure.storage.blob import BlockBlobService
+
+# Set up the Azure SQL Database connection
+server = '<server_name>.database.windows.net'
+database = '<database_name>'
+username = '<username>'
+password = '<password>'
+driver= '{ODBC Driver 17 for SQL Server}'
+connection_string = f"DRIVER={driver};SERVER={server};DATABASE={database};UID={username};PWD={password}"
+
+# Connect to the Azure SQL Database using pyodbc
+cnxn = pyodbc.connect(connection_string)
+
+# Set up the blob storage connection
+account_name = '<storage_account_name>'
+account_key = '<storage_account_key>'
+container_name = '<container_name>'
+blob_name = '<blob_name>'
+block_blob_service = BlockBlobService(account_name=account_name, account_key=account_key)
+
+# Download the file from blob storage
+blob_content = block_blob_service.get_blob_to_text(container_name, blob_name).content
+
+# Convert the file content to a DataFrame
+df = pd.read_csv(blob_content)
+
+# Write the data to Azure SQL Database
+table_name = '<table_name>'
+df.to_sql(table_name, cnxn, if_exists='replace', index=False)
+----------------------------------------------------------------------------------------------
+Creating a table with selecting path:
+
+spark.sql("DROP TABLE IF EXISTS diamonds")
+spark.sql('''
+    CREATE TABLE diamonds
+    USING csv
+    OPTIONS (
+        path "/databricks-datasets/Rdatasets/data-001/csv/ggplot2/diamonds.csv",
+        header "true"
+    )
+''')
+
+Display the data:
+
+display(spark.sql("SELECT * from diamonds"))
+
+Create delta table:
+
+diamonds = spark.read.csv("/databricks-datasets/Rdatasets/data-001/csv/ggplot2/diamonds.csv", header="true", inferSchema="true")
+diamonds.write.format("delta").mode("overwrite").save("/delta/diamonds")
+
+spark.sql("DROP TABLE IF EXISTS diamonds")
+spark.sql('CREATE TABLE diamonds USING DELTA LOCATION \'/delta/diamonds/\'')
+
+query:
+
+%sql
+SELECT color, avg(price) AS price FROM diamonds GROUP BY color ORDER BY color
+
+Select the design type:
+
+%python
+from pyspark.sql.functions import avg
+
+display(diamonds.select("color","price").groupBy("color").agg(avg("price")).sort("color"))
+
+---------------------------------------------------------------------------------------------------------------
+azuresql to databricks:
+
+dbName = 'sqlserveradb12'
+dbserverName = 'databrickstoazuresql.database.windows.net'
+UserName = 'abc'
+Pwd = 'Venkanna@3370'
+dbPort = '1433'
+Jdbcurl = 'jdbc:sqlserver://' + dbserverName + ':' + dbPort + ';database=' + dbName + ';user=' + UserName + ';password=' + Pwd
+url = 'jdbc:sqlserver://' + dbserverName + ':' + dbPort + ';database=' + dbName + ';user=' + UserName + ';password=' + Pwd
+
+read the data:
+
+Temp_emp="(select * from employee) views"
+emp_data=spark.read.jdbc(url,table=Temp_emp)
+display(emp_data)
+
+write the data into azure sql:
+
+emp_data.write.mode('overwrite').jdbc(url, 'dbo.data_emp', properties={"truncate": "true"})
+
+agian read the data:
+
+data_Remp=spark.read.jdbc(url,table="(select * from dbo.data_emp) views")
+display(data_Remp)
+
+Finding Individual names:
+
+df1=df.select(df.schema.names)
+display(df1)
+--------------------------------------------------------------------------------------------------------------------------------
+Generate the identity key  from source to target in databricks:
+
+from pyspark.sql.functions import monotonically_increasing_id
+
+# Read the source file
+source_data = spark.read.csv("path_to_source_file.csv", header=True)
+
+# Add identity values
+source_data_with_identity = source_data.withColumn("identity", monotonically_increasing_id())

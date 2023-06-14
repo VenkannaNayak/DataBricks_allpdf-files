@@ -1,0 +1,175 @@
+
+Collection Functions
+contains
+Returns true if dictionary contains a key, list contains value, or string contains substring. For example, the following expression returns true: contains('abacaba','aca')
+empty
+Returns true if object, array, or string is empty. For example, the following expression returns true: empty('')
+first
+Returns the first element in the array or string passed in. For example, this function returns 0: first([0,2,3])
+intersection
+Returns a single array or object with the common elements between the arrays or objects passed to it. For example, this function returns [1, 2]: intersection([1, 2, 3], [101, 2, 1, 10],[6, 8, 1, 2]). The parameters for the function can either be a set of objects or a set of arrays (not a mixture thereof). If there are two objects with the same name, the last object with that name appears in the final object.
+join
+Return a string that has all the items from an array and has each character separated by a delimiter.
+last
+Returns the last element in the array or string passed in. For example, this function returns 3: last([0,2,3])
+length
+Returns the number of elements in an array or string. For example, the following expression returns 3: length('abc')
+skip
+Returns the elements in the array starting at index Count, for example this function returns [3, 4]: skip([1, 2 ,3 ,4], 2)
+take
+Returns the first Count elements from the array or string passed in, for example this function returns [1, 2]: take([1, 2, 3, 4], 2)
+union
+Returns a single array or object with all of the elements that are in either array or object passed to it. For example, this function returns [1, 2, 3, 10, 101] : union([1, 2, 3], [101, 2, 1, 10]). The parameters for the function can either be a set of objects or a set of arrays (not a mixture thereof). If there are two objects with the same name in the final output, the last object with that name appears in the final object.
+Conversion Functions
+string
+Convert the parameter to a string. For example, the following expression returns '10': string(10). Can also convert an object to a string, for example if the foo parameter is an object with one property bar : baz, then the following would return {"bar" : "baz"}: string(pipeline().parameters.foo)
+array
+Convert the parameter to an array. For example, the following expression returns ["abc"]: array('abc')
+base64
+Returns the base64 representation of the input string. For example, the following expression returns c29tZSBzdHJpbmc=: base64('some string')
+base64ToBinary
+Returns a binary representation of a base64 encoded string. For example, the following expression returns the binary representation of some string: base64ToBinary('c29tZSBzdHJpbmc=')
+base64ToString
+Returns a string representation of a based64 encoded string. For example, the following expression returns some string: base64ToString('c29tZSBzdHJpbmc=')
+binary
+Returns a binary representation of a value. For example, the following expression returns a binary representation of some string: binary('some string')
+bool
+Convert the parameter to a Boolean. For example, the following expression returns false: bool(0)
+coalesce
+Returns the first non-null object in the arguments passed in. Note: an empty string is not null. For example, if parameters 1 and 2 are not defined, this returns fallback: coalesce('pipeline().parameters.parameter1', pipeline().parameters.parameter2 ,'fallback')
+createArray
+Creates an array from the parameters. For example, the following expression returns ["a", "c"]: createArray('a', 'c')
+dataUri
+Returns a data URI of a value. For example, the following expression returns data: text/plain;charset=utf8;base64,c29tZSBzdHJpbmc=: dataUri('some string')
+dataUriToBinary
+Returns a binary representation of a data URI. For example, the following expression returns the binary representation of some string: dataUriToBinary('data:;base64,c29tZSBzdHJpbmc=')
+dataUriToString
+Returns a string representation of a data URI. For example, the following expression returns some string: dataUriToString('data:;base64,c29tZSBzdHJpbmc=')
+decodeBase64
+Returns a string representation of an input based64 string. For example, the following expression returns some string: decodeBase64('c29tZSBzdHJpbmc=')
+decodeDataUri
+Returns a binary representation of an input data URI string. For example, the following expression returns the binary representation of some string: decodeDataUri('data:;base64,c29tZSBzdHJpbmc=')
+decodeUriComponent
+Un-URL-escapes the string that's passed in. For example, the following expression returns You Are:Cool/Awesome: decodeUriComponent('You+Are%3ACool%2FAwesome')
+encodeUriComponent
+URL-escapes the string that's passed in. For example, the following expression returns You+Are%3ACool%2FAwesome: encodeUriComponent('You Are:Cool/Awesome')
+float
+Convert the parameter argument to a floating-point number. For example, the following expression returns 10.333: float('10.333')
+int
+Convert the parameter to an integer. For example, the following expression returns 100 as a number, rather than a string: int('100')
+json
+Convert the parameter to a JSON type value. It is the opposite of string(). For example, the following expression returns [1,2,3] as an array, rather than a string: parse('[1,2,3]'). Likewise, you can convert a string to an object. For example, json('{"bar" : "baz"}') returns: { "bar" : "baz" }
+uriComponent
+Returns a URI encoded representation of a value. For example, the following expression returns You+Are%3ACool%2FAwesome: uriComponent('You Are:Cool/Awesome ')
+uriComponentToBinary
+Returns a binary representation of a URI encoded string. For example, the following expression returns a binary representation of You Are:Cool/Awesome: uriComponentToBinary('You+Are%3ACool%2FAwesome')
+uriComponentToString
+Returns a string representation of a URI encoded string. For example, the following expression returns You Are:Cool/Awesome: uriComponentToString('You+Are%3ACool%2FAwesome')
+xml
+Return an xml representation of the value. For example, the following expression returns an xml content represented by '<name>Alan</name>': xml('<name>Alan</name>'). The xml function supports JSON object input as well. For example, the parameter { "abc": "xyz" } is converted to an xml content <abc>xyz</abc>
+xpath
+Return an array of xml nodes matching the xpath expression of a value that the xpath expression evaluates to.
+Date Functions
+formatDateTime
+Returns a string in date format. The result is a string in ISO 8601 format ("o") by default, unless a format specifier is provided.
+utcnow
+Returns the current timestamp as a string.
+addToTime
+Add a number of time units to a timestamp. For example, addToTime('2018-01-01T00:00:00Z', 1, 'Day') results in 2018-01-02T00:00:00.0000000Z
+adddays
+Adds an integer number of days to a string timestamp passed in. The number of days can be positive or negative. The result is a string in ISO 8601 format ("o") by default, unless a format specifier is provided. For example 2015-02-23T13:27:36Z:adddays('2015-03-15T13:27:36Z', -20)
+addhours
+Adds an integer number of hours to a string timestamp passed in. The number of hours can be positive or negative. The result is a string in ISO 8601 format ("o") by default, unless a format specifier is provided. For example 2015-03-16T01:27:36Z:addhours('2015-03-15T13:27:36Z', 12)
+addminutes
+Adds an integer number of minutes to a string timestamp passed in. The number of minutes can be positive or negative. The result is a string in ISO 8601 format ("o") by default, unless a format specifier is provided. For example, 2015-03-15T14:00:36Z:addminutes('2015-03-15T13:27:36Z', 33)
+addseconds
+Adds an integer number of seconds to a string timestamp passed in. The number of seconds can be positive or negative. The result is a string in ISO 8601 format ("o") by default, unless a format specifier is provided. For example: addseconds('2015-03-15T13:27:36Z', -36) results in 2015-03-15T13:27:00Z
+convertFromUtc
+Convert a timestamp from Universal Time Coordinated (UTC) to the target time zone. For example, convertFromUtc('2018-01-01T08:00:00.0000000Z', 'Pacific Standard Time') results in '2018-01-01T00:00:00.0000000'
+convertTimeZone
+Convert a timestamp from the source time zone to the target time zone. For example, convertTimeZone('2018-01-01T80:00:00.0000000Z', 'UTC', 'Pacific Standard Time') results in '2018-01-01T00:00:00.0000000'
+convertToUtc
+Convert a timestamp from the source time zone to Universal Time Coordinated (UTC). For example, convertToUtc('01/01/2018 00:00:00', 'Pacific Standard Time') results in '2018-01-01T08:00:00.0000000Z'
+dayOfMonth
+Return the day of the month from a timestamp.
+dayOfWeek
+Return the day of the week from a timestamp.
+dayOfYear
+Return the day of the year from a timestamp.
+getFutureTime
+Return the current timestamp plus the specified time units. For example, suppose the current timestamp is '2018-03-01T00:00:00.0000000Z', getFutureTime(5, 'Day') results in '2018-03-06T00:00:00.0000000Z'.
+getPastTime
+Return the current timestamp minus the specified time units. For example, suppose the current timestamp is '2018-02-01T00:00:00.0000000Z', getPastTime(5, 'Day') results in '2018-01-27T00:00:00.0000000Z'.
+startOfDay
+Return the start of the day for a timestamp.
+startOfHour
+Return the start of the hour for a timestamp.
+startOfMonth
+Return the start of the month for a timestamp.
+subtractFromTime
+Subtract a number of time units from a timestamp. For example, subtractFromTime('2018-01-02T00:00:00Z', 1, 'Day') results in '2018-01-01T00:00:00:0000000Z'.
+ticks
+Return the ticks property value for a specified timestamp. A tick is a 100-nanosecond interval.
+Logical Functions
+equals
+Returns true if two values are equal. For example, if parameter1 is foo, the following expression would return true: equals(pipeline().parameters.parameter1, 'foo')
+if
+Returns a specified value based on if the expression provided results in true or false. For example, the following returns "yes": if(equals(1, 1), 'yes', 'no')
+and
+Returns true if both of the parameters are true. Both arguments need to be Booleans. The following returns false: and(greater(1,10),equals(0,0))
+greater
+Returns true if the first argument is greater than the second. Note, values can only be of type integer, float, or string. For example, the following expression returns false: greater(10,10)
+greaterOrEquals
+Returns true if the first argument is greater than or equal to the second. Note, values can only be of type integer, float, or string. For example, the following expression returns false: greaterOrEquals(10,100)
+less
+Returns true if the first argument is less than the second. Note, values can only be of type integer, float, or string. For example, the following expression returns true: less(10,100)
+lessOrEquals
+Returns true if the first argument is less than or equal to the second. Note, values can only be of type integer, float, or string. For example, the following expression returns true: lessOrEquals(10,10)
+not
+Returns true if the parameter is false. The following returns true: not(contains('200 Success','Fail'))
+or
+Returns true if either of the parameters are true. Both arguments need to be Booleans. The following returns true: or(greater(1,10),equals(0,0))
+Math Functions
+add
+Returns the result of the addition of the two numbers. For example, this function returns 20.333: add(10,10.333)
+div
+Returns the result of the division of the two numbers. For example, the following returns 1.0333: div(10.333,10)
+max
+There are two different patterns for calling this function: max([0,1,2]) Here max takes an array. This expression returns 2. Alternatively, this function can take a comma-separated list of values: max(0,1,2) This function also returns 2. Note, all values must be numbers, so if the parameter is an array it has to only have numbers in it.
+min
+There are two different patterns for calling this function: min([0,1,2]) Here min takes an array. This expression returns 0. Alternatively, this function can take a comma-separated list of values: min(0,1,2) This function also returns 0. Note, all values must be numbers, so if the parameter is an array it has to only have numbers in it.
+mod
+Returns the result of the remainder after the division of the two numbers (modulo). For example, the following expression returns 2: mod(10,4)
+mul
+Returns the result of the multiplication of the two numbers. For example, the following returns 103.33: mul(10,10.333)
+rand
+Generates a random integer within the specified range (inclusive on both ends. For example, this could return 42:rand(-1000,1000)
+range
+Generates an array of integers starting from a certain number, and you define the length of the returned array. For example, this function returns [3,4,5,6]: range(3,4)
+sub
+Returns the result of the subtraction of the two numbers. For example, this function returns: -0.333: sub(10,10.333)
+String Functions
+concat
+Combines any number of strings together. For example, if parameter1 is foo, the following expression would return somevalue-foo-somevalue: concat('somevalue-',pipeline().parameters.parameter1,'-somevalue')
+endswith
+Checks if the string ends with a value case insensitively. For example, the following expression returns true: endswith('hello, world', 'world')
+guid
+Generates a globally unique string (aka. guid). For example, the following output could be generated c2ecc88d-88c8-4096-912c-d6f2e2b138ce
+indexof
+Find the index of a value within a string case insensitively. For example, the following expression returns 7: indexof('hello, world.', 'world')
+lastindexof
+Find the last index of a value within a string case insensitively. For example, the following expression returns 3: lastindexof('foofoo', 'foo')
+replace
+Replaces a string with a given string. For example, the expression: replace('the old string', 'old', 'new') returns: the new string
+split
+Splits the string using a separator. For example, the following expression returns ["a", "b", "c"]: split('a;b;c',';')
+startswith
+Checks if the string starts with a value case insensitively. For example, the following expression returns true: startswith('hello, world', 'hello')
+substring
+Returns a subset of characters from a string. For example, the following expression: substring('somevalue-foo-somevalue',10,3) returns: foo
+toLower
+Converts a string to lowercase. For example, the following returns two by two is four: toLower('Two by Two is Four')
+toUpper
+Converts a string to uppercase. For example, the following returns TWO BY TWO IS FOUR: toUpper('Two by Two is Four')
+trim
+Remove leading and trailing whitespace from a string, and return the updated string.

@@ -1,0 +1,195 @@
+SQL DATA TYPES:
+
+Numeric Types:
+
+INT or INTEGER: Integer values.
+SMALLINT: Small integer values.
+BIGINT: Large integer values.
+DECIMAL(p, s) or NUMERIC(p, s): Exact decimal values with a specified precision p and scale s.
+FLOAT(p): Floating-point numbers with a specified precision p.
+REAL: Single-precision floating-point numbers.
+DOUBLE PRECISION: Double-precision floating-point numbers.
+Character String Types:
+
+CHAR(n): Fixed-length character strings with a specified length n.
+VARCHAR(n): Variable-length character strings with a maximum length n.
+TEXT: Variable-length character strings with no predefined length limit.
+NCHAR(n): Fixed-length Unicode character strings with a specified length n.
+NVARCHAR(n): Variable-length Unicode character strings with a maximum length n.
+NTEXT: Variable-length Unicode character strings with no predefined length limit.
+Date and Time Types:
+
+DATE: Date values in the format 'YYYY-MM-DD'.
+TIME: Time values in the format 'HH:MI:SS'.
+DATETIME or DATETIME2: Date and time values in the format 'YYYY-MM-DD HH:MI:SS'.
+TIMESTAMP: Date and time values in a specific format, often representing the number of seconds since a particular reference point.
+INTERVAL: Represents a duration or time span.
+Boolean Type:
+
+BOOLEAN or BOOL: Represents true/false or logical values.
+Binary Data Types:
+
+BINARY(n): Fixed-length binary data with a specified length n.
+VARBINARY(n): Variable-length binary data with a maximum length n.
+BLOB: Variable-length binary data with no predefined length limit.
+Other Types:
+
+ENUM: Represents a predefined set of values.
+SET: Represents a set of values chosen from a predefined set.
+
+Interval Types:
+
+YEAR: Represents a year interval.
+MONTH: Represents a month interval.
+DAY: Represents a day interval.
+HOUR: Represents an hour interval.
+MINUTE: Represents a minute interval.
+SECOND: Represents a second interval.
+Monetary Types:
+
+MONEY: Represents a currency amount.
+SMALLMONEY: Represents a currency amount with a smaller range.
+Spatial Types:
+
+GEOMETRY: Represents geometric objects (points, lines, polygons, etc.).
+GEOGRAPHY: Represents geographical objects (latitude, longitude, etc.).
+GIS: Represents a generic geographic information system type.
+JSON Types:
+
+JSON: Represents JSON (JavaScript Object Notation) data.
+XML Type:
+
+XML: Represents XML (eXtensible Markup Language) data.
+Array Types:
+
+ARRAY: Represents an ordered collection of elements.
+Row Types:
+
+ROW: Represents a row of a table or a composite type.
+UDT (User-Defined Types):
+
+Allows users to define their own custom data types.
+
+UUID Type:
+
+UUID: Represents universally unique identifiers.
+Bit Types:
+
+BIT: Represents a fixed-length sequence of bits.
+BIT VARYING(n): Variable-length sequence of bits with a maximum length n.
+Enumeration Types:
+
+ENUM: Represents a predefined set of values that the column can take.
+Money Type:
+
+MONEY: Represents a currency amount.
+Network Address Types:
+
+INET: Represents an IPv4 or IPv6 network address.
+CIDR: Represents an IPv4 or IPv6 network address with a mask length.
+Range Types:
+
+INT4RANGE, INT8RANGE: Represents a range of integer values.
+NUMRANGE: Represents a range of numeric values.
+TSRANGE, TSTZRANGE: Represents a range of timestamp values.
+DATERANGE: Represents a range of date values.
+Composite Types:
+
+ROW: Represents a row or composite type.
+Domain Types:
+
+DOMAIN: Represents a user-defined data type.
+-------------------------------------------------------------------------
+CREATE TABLE books (
+  id SERIAL PRIMARY KEY,
+  data XML
+);
+
+INSERT INTO books (data) VALUES ('<book><title>Harry Potter</title><author>J.K. Rowling</author></book>');
+
+SELECT * FROM books;
+---------------------------------------------------------------------------------
+To Read the single files from pc in sql:
+
+create table my_tab1
+(
+eno int,
+ename varchar(50),
+sal money,
+constraint my_pk_tables_stage primary key (eno)
+)
+
+bulk insert my_tab1
+from 'c:\venky.txt'
+with
+(
+fieldterminator =',',
+rowterminator ='\n',
+firstrow=2
+)
+---------------------------------------------------------------------------------
+To Read multiple files from pc into the sql:
+
+create table my_tab1
+(
+eno int,
+ename varchar(50),
+sal money,
+constraint my_pk_tables_stage primary key (eno)
+)
+
+CREATE PROCEDURE ProcessFiles
+AS
+BEGIN
+    DECLARE @FileName NVARCHAR(255);
+    DECLARE @FilePath NVARCHAR(255);
+    DECLARE @SQL NVARCHAR(MAX);
+
+    -- Specify the directory where the files are located
+    SET @FilePath = 'c:\venky.txt';
+
+    -- Loop through the files in the directory
+    DECLARE FilesCursor CURSOR LOCAL FAST_FORWARD FOR
+    SELECT name
+    FROM sys.dm_os_loaded_modules
+    WHERE name LIKE @FilePath + '%';
+
+    OPEN FilesCursor;
+    FETCH NEXT FROM FilesCursor INTO @FileName;
+
+    WHILE @@FETCH_STATUS = 0
+    BEGIN
+        -- Construct the BULK INSERT statement dynamically
+        SET @SQL = 'BULK INSERT my_tab1
+                    FROM ''' + @FileName + '''
+                    WITH (
+                        FIELDTERMINATOR = '','',
+                        ROWTERMINATOR = ''\n'',
+                        FIRSTROW = 2
+                    );';
+
+        -- Execute the dynamic SQL
+        EXEC sp_executesql @SQL;
+
+        FETCH NEXT FROM FilesCursor INTO @FileName;
+    END;
+
+    CLOSE FilesCursor;
+    DEALLOCATE FilesCursor;
+END
+
+EXEC ProcessFiles;
+------------------------------------------------------------------------------------------
+To Read the xml files in sql:
+
+create table xml_tb
+(
+id int identity(1,1),
+data_type xml
+)
+
+insert into xml_tb values('<xml_tb>
+<title>my name munavath venkanna with azure data engineering in eclasess institute</title>
+<owner>eclasess_owner it was in ameerpeta location</owner>
+</xml_tb>'),('{"name":"venkanna"}')
+------------------------------------------------------------------------------------------

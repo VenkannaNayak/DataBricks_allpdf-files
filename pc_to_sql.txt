@@ -1,0 +1,88 @@
+eno,ename,sal
+10,raj,100
+20,roy,200
+30,joy,300
+------------------------------------------------------------
+To Read the single files from pc in sql:
+
+create table my_tab1
+(
+eno int,
+ename varchar(50),
+sal money,
+constraint my_pk_tables_stage primary key (eno)
+)
+
+bulk insert my_tab1
+from 'c:\venky.txt'
+with
+(
+fieldterminator =',',
+rowterminator ='\n',
+firstrow=2
+)
+
+------------------------------------------------------------------------------
+create table my_tab1
+(
+eno int,
+ename varchar(50),
+sal money,
+constraint my_pk_tables_stage primary key (eno)
+)
+
+CREATE PROCEDURE ProcessFiles
+AS
+BEGIN
+    DECLARE @FileName NVARCHAR(255);
+    DECLARE @FilePath NVARCHAR(255);
+    DECLARE @SQL NVARCHAR(MAX);
+
+    -- Specify the directory where the files are located
+    SET @FilePath = 'c:\venky.txt';
+
+    -- Loop through the files in the directory
+    DECLARE FilesCursor CURSOR LOCAL FAST_FORWARD FOR
+    SELECT name
+    FROM sys.dm_os_loaded_modules
+    WHERE name LIKE @FilePath + '%';
+
+    OPEN FilesCursor;
+    FETCH NEXT FROM FilesCursor INTO @FileName;
+
+    WHILE @@FETCH_STATUS = 0
+    BEGIN
+        -- Construct the BULK INSERT statement dynamically
+        SET @SQL = 'BULK INSERT my_tab1
+                    FROM ''' + @FileName + '''
+                    WITH (
+                        FIELDTERMINATOR = '','',
+                        ROWTERMINATOR = ''\n'',
+                        FIRSTROW = 2
+                    );';
+
+        -- Execute the dynamic SQL
+        EXEC sp_executesql @SQL;
+
+        FETCH NEXT FROM FilesCursor INTO @FileName;
+    END;
+
+    CLOSE FilesCursor;
+    DEALLOCATE FilesCursor;
+END
+
+EXEC ProcessFiles;
+------------------------------------------------------------------------------------------
+To Read the xml files in sql:
+
+create table xml_tb
+(
+id int identity(1,1),
+data_type xml
+)
+
+insert into xml_tb values('<xml_tb>
+<title>my name munavath venkanna with azure data engineering in eclasess institute</title>
+<owner>eclasess_owner it was in ameerpeta location</owner>
+</xml_tb>'),('{"name":"venkanna"}')
+------------------------------------------------------------------------------------------

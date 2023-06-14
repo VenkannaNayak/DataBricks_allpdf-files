@@ -1,0 +1,53 @@
+select UPPER(cname) as cust_names from customer
+
+select LEFT(cname,4) as cust_names from customer
+
+select right(cname,4) as cust_names from customer
+
+select SUBSTRING('eclasessinstitute',2,2) as choose_letters from customer
+
+select replace('hyderabad ','hyd',' venky') as result from customer
+
+select LEN('venkanna') as total_letters from customer
+
+select RTRIM('venkanna           ') as closed_spaces from customer
+
+select TRIM('   venkana     ') as earased_spaces_in_both_side from customer
+
+select REPLICATE('india,',2) as replicateletters from customer
+
+select REVERSE('india and bharat') as reversletters from customer
+
+--numerics functions----
+
+select ABS(-5) as positive_and_negative
+
+select ABS(25) as positive_and_negative
+
+select FLOOR(11.9999) as floor_value
+select CEILING(11.001) as ceiling_value
+select ROUND(11.9999,2) as round_value
+select SQRT(729) as square_root_value
+--Date function--
+
+select GETDATE() as today_date
+select year(MONTH(DAY(GETDATE()))) as years_of_date
+select MONTH(GETDATE()) as month_date
+select DAY(GETDATE()) as getdatename
+
+select DATENAME(MONTH,GETDATE()) as month_and_datename
+select DATENAME(DW,GETDATE()) as dw_month
+
+select DATEPART(HOUR,GETDATE()) as hours_date
+select DATEPART(MINUTE,GETDATE()) as showing_minutes
+select DATEPART(SECOND,GETDATE()) as showing_seconds
+select DATEPART(MICROSECOND,GETDATE()) as microminutes
+select DATEPART(YEAR,GETDATE()) as datepart_name
+select DATEPART(MONTH,GETDATE()) as month_get_date
+
+--select date add--
+select DATEADD(DAY,1,GETDATE()) as day_with_date
+select DATEADD(MONTH,2,GETDATE()) as month_with_date
+select DATEADD(YEAR,2,GETDATE())
+select GETUTCDATE()
+select DATEDIFF(DAY,GETDATE(),'2023-04-01')
